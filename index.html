@@ -2,1325 +2,413 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes">
 <title>Security Investigation Written Statement</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&display=swap');
+:root{--bg:#eaf1f8;--surface:#f7fbff;--card:#fff;--card2:#f2f7fc;--border:rgba(58,90,130,.16);--border2:rgba(44,86,154,.25);--primary:#0b57d0;--primary2:#174ea6;--accent:#0f766e;--red:#dc2626;--text:#10233d;--text2:#425b79;--text3:#6c819c;--shadow:0 18px 45px -24px rgba(16,35,61,.28)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);padding:20px 14px}.page{max-width:1180px;margin:auto}.hdr{background:linear-gradient(135deg,#10315c 0%,#0b57d0 62%,#0f766e 140%);border-radius:24px 24px 18px 18px;padding:1.4rem 1.6rem;color:#fff;box-shadow:var(--shadow)}.hdr-flex{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}.hdr-kicker{font-size:.95rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.hdr h1{font-size:1.85rem;font-weight:800;margin-top:6px}.hdr p{margin-top:8px;color:rgba(255,255,255,.88);font-size:.95rem}.shell{background:var(--surface);border:1px solid var(--border);border-top:0;border-radius:0 0 22px 22px;box-shadow:var(--shadow);overflow:hidden}.content{padding:18px 22px}.type-tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;background:#e6eef8;padding:7px;border-radius:16px}.type-tab{border:0;border-radius:12px;min-height:50px;background:transparent;color:#334e6f;font:800 15px 'Segoe UI';cursor:pointer;transition:.18s}.type-tab:hover{background:rgba(255,255,255,.7)}.type-tab.active{background:#fff;color:#0b57d0;box-shadow:0 5px 16px rgba(16,35,61,.12)}form{display:grid;gap:22px}.form-mode[hidden]{display:none!important}.form-mode{display:grid;gap:22px}.panel{background:var(--card);border-radius:18px;border:1px solid var(--border);overflow:hidden}.panel-hdr{background:var(--card2);padding:12px 18px;border-bottom:1px solid var(--border);font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#0d9488}.panel-body{padding:18px}.form-table{width:100%;border-collapse:collapse;table-layout:fixed;border:1px solid var(--border2)}.form-table th,.form-table td{border:1px solid var(--border2);padding:12px;vertical-align:middle;text-align:left}.form-table th{width:28%;background:var(--card2);font-weight:700}.form-table td{background:var(--card)}label{display:block;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--text2);line-height:1.4}label.req:after{content:' *';color:var(--red)}input,select,textarea{width:100%;background:#fff;border:1px solid var(--border2);border-radius:12px;padding:12px 14px;color:var(--text);font-size:15px;font-weight:400;font-family:inherit}textarea{min-height:160px;resize:vertical;line-height:1.55}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(11,87,208,.15)}input[readonly]{background:var(--card2);color:var(--text3)}.split-input{display:flex;gap:10px;align-items:center}.btn-sm,.btn-secondary,.btn-gold{min-height:40px;border-radius:12px;border:1px solid var(--border2);padding:0 14px;font-size:.82rem;font-weight:800;cursor:pointer}.btn-sm,.btn-secondary{background:var(--card2);color:var(--text)}.btn-gold{background:linear-gradient(135deg,var(--accent),var(--primary));color:#fff;border:0;min-height:44px}.char-row{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}.affirm{display:flex;gap:12px;align-items:flex-start;background:var(--card2);padding:16px;border-radius:16px}.affirm input{width:22px;height:22px;accent-color:var(--accent);flex:0 0 auto;margin-top:2px}.sig-box{border:2px dashed var(--border2);border-radius:18px;background:var(--surface);padding:8px}.sig-box canvas{width:100%;height:170px;display:block;border-radius:12px;background:#fff;touch-action:none}.front-sign-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.sig-badge{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 14px;border-radius:999px;background:rgba(11,87,208,.08);border:1px solid rgba(11,87,208,.18);font-size:.82rem;font-weight:800;color:var(--text2)}.photo-upload-box{border:2px dashed var(--border2);border-radius:14px;background:var(--card2);padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;position:relative;min-height:130px;justify-content:center}.photo-upload-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}.photo-preview{width:100%;max-height:150px;object-fit:contain;border-radius:8px;display:none}.photo-label-text{font-size:.82rem;font-weight:700;color:var(--text2);text-align:center}.photo-icon{font-size:28px;opacity:.55}.footer{background:var(--card2);padding:16px 18px;border-radius:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}.status{font-weight:800;color:var(--accent)}.foot-actions{display:flex;gap:10px;flex-wrap:wrap}
+.progress-overlay{position:fixed;inset:0;background:rgba(9,18,31,.38);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px}.progress-overlay.show{display:flex}.progress-card{width:min(420px,100%);background:#fff;border-radius:18px;padding:22px;box-shadow:var(--shadow);text-align:center}.progress-title{font-size:1rem;font-weight:800;margin-bottom:14px}.progress-bar{height:12px;background:#edf2f7;border-radius:999px;overflow:hidden}.progress-fill{height:100%;width:0;background:linear-gradient(135deg,var(--primary),var(--accent));transition:width .18s}.progress-note{margin-top:10px;color:var(--text2);font-size:.84rem}
 
-:root {
-  --bg:#eaf1f8;--surface:#f7fbff;--card:#fff;--card2:#f2f7fc;
-  --border:rgba(58,90,130,0.14);--border2:rgba(44,86,154,0.24);
-  --primary:#0b57d0;--primary2:#174ea6;--accent:#0f766e;--accent2:#0d9488;
-  --red:#dc2626;--text:#10233d;--text2:#425b79;--text3:#6c819c;
-  --shadow:0 18px 45px -24px rgba(16,35,61,0.28);
-  --table-head:#e7f0fb;
+.info-table{table-layout:fixed}
+.info-table th{width:17%}
+.info-table td{width:33%}
+.info-table .full-label{width:17%}
+.info-table .full-value{width:83%}
+.inline-subject{display:grid;grid-template-columns:minmax(180px,1fr) minmax(180px,1fr);gap:10px}
+.form-subtitle{font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:10px}
+@media(max-width:760px){.info-table,.info-table tbody,.info-table tr,.info-table th,.info-table td{display:block;width:100%!important}.info-table tr{border-bottom:1px solid var(--border2)}.info-table th,.info-table td{border-left:0;border-right:0}.info-table th{border-bottom:0;padding-bottom:6px}.info-table td{border-top:0;padding-top:6px}.inline-subject{grid-template-columns:1fr}}
+
+/* PDF templates */
+.pdf-render-area{position:fixed;left:-12000px;top:0;width:794px;visibility:visible;opacity:1;pointer-events:none;z-index:-9999;background:#fff}.print-report{display:block;background:#fff;color:#111827;width:794px;padding:22px;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}.corp-header{display:flex;align-items:stretch;border-bottom:2px solid #0b57d0;margin-bottom:12px;padding-bottom:10px;gap:14px}.corp-logo-box{width:64px;display:flex;align-items:center;justify-content:center}.corp-logo-circle{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#10315c,#0b57d0);display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;font-weight:900}.corp-title-block{flex:1}.corp-dept{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#0b57d0;margin-bottom:2px}.corp-title{font-size:18px;font-weight:800;color:#0f172a;margin-bottom:2px}.corp-meta{font-size:9.5px;color:#64748b}.corp-stamp{display:flex;align-items:flex-start}.corp-stamp-badge{font-size:10px;font-weight:800;letter-spacing:.06em;padding:4px 10px;border-radius:4px;background:#e7f0fb;color:#0b57d0;border:1px solid #b5d4f4}.report-section-title{font-size:9px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#0b57d0;margin:10px 0 6px;padding-left:7px;border-left:3px solid #0b57d0}.report-card{border:1px solid #dde6f0;border-radius:8px;overflow:hidden;margin-bottom:12px}.report-card-hdr{background:#f4f8fc;border-bottom:1px solid #dde6f0;padding:6px 10px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#1e3a5f}.report-table{width:100%;border-collapse:collapse}.report-table th,.report-table td{border-bottom:1px solid #edf2f7;padding:6px 9px;font-size:9.5px;text-align:left;vertical-align:top;word-break:break-word}.report-table th{width:30%;font-weight:700;color:#475569;background:#f8fafc}.report-text-box{padding:10px;font-size:10px;line-height:1.55;color:#1e293b;white-space:pre-wrap;word-break:break-word;min-height:55px}.affirmation-block{border:1px solid #b5d4f4;border-radius:8px;background:#f0f7ff;padding:8px 10px;font-size:9.5px;line-height:1.55;color:#1e293b;margin-bottom:12px}.sig-layout{display:grid;grid-template-columns:1.4fr 1fr 1fr}.sig-left,.sig-cell{padding:8px}.sig-left{border-right:1px solid #dde6f0}.sig-cell{border-right:1px solid #dde6f0;display:flex;flex-direction:column;justify-content:center}.sig-cell:last-child{border-right:0}.sig-label{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:4px;text-align:center}.sig-img-box{height:120px;border:1.5px dashed #b5d4f4;border-radius:8px;background:#f8fafc;display:flex;align-items:center;justify-content:center;overflow:hidden}.sig-img-box img{max-width:100%;max-height:105px;object-fit:contain}.sig-field{display:flex;align-items:center;justify-content:center;text-align:center;border:1px solid #dde6f0;border-radius:8px;padding:7px 9px;font-size:9.5px;min-height:34px}.photos-grid{display:grid;grid-template-columns:1fr 1fr}.photo-panel{padding:10px}.photo-panel:first-child{border-right:1px solid #dde6f0}.photo-panel-label{font-size:8.5px;font-weight:800;text-transform:uppercase;color:#475569;margin-bottom:6px}.photo-img-box{border:1.5px solid #cfd8e3;border-radius:8px;background:#f8fafc;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:160px}.photo-img-box img{max-width:100%;max-height:170px;object-fit:contain}.no-photo{font-size:9px;color:#94a3b8;text-align:center;padding:16px}.print-footer{margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:8.8px;color:#94a3b8}.confidential-badge{font-size:8px;font-weight:800;letter-spacing:.08em;color:#dc2626;border:1px solid #fca5a5;background:#fef2f2;padding:3px 7px;border-radius:4px}
+.team-report .corp-header{border-bottom-color:#0f766e}.team-report .corp-logo-circle{background:linear-gradient(135deg,#0f766e,#0b57d0)}.team-report .report-section-title{color:#0f766e;border-left-color:#0f766e}.team-report .corp-dept{color:#0f766e}.team-report .team-banner{background:#edfdf8;border:1px solid #b7eadc;color:#0f5f58;border-radius:8px;padding:8px 10px;font-size:10px;font-weight:800;margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em}
+@media(max-width:700px){body{padding:10px 8px}.content{padding:12px}.hdr{padding:1rem}.hdr h1{font-size:1.45rem}.type-tabs{gap:6px}.type-tab{font-size:13px}.form-table th{width:35%}.form-table th,.form-table td{padding:8px}.form-table label{font-size:.67rem;letter-spacing:0}.form-table input,.form-table select,.form-table textarea{font-size:15px;padding:10px 8px}.split-input,.foot-actions{flex-direction:column;align-items:stretch}.split-input>*,.foot-actions>*{width:100%}}
+
+
+/* ===== EXECUTIVE SECURITY BLUE — COMMERCIAL PRODUCTION THEME ===== */
+:root{
+  --bg:#eef2f5;
+  --surface:#f6f8fa;
+  --card:#ffffff;
+  --card2:#f4f7fa;
+  --border:#d7e0e8;
+  --border2:#cbd6e1;
+  --primary:#153a60;
+  --primary2:#0d2947;
+  --accent:#c7a44a;
+  --accent2:#b89231;
+  --red:#a93636;
+  --text:#172a3f;
+  --text2:#53687e;
+  --text3:#7b8c9f;
+  --success:#28735a;
+  --shadow:0 18px 46px -28px rgba(15,41,71,.32);
 }
-body.dark{--bg:#0b1320;--surface:#101a2b;--card:rgba(18,29,46,0.96);--card2:#1a2a43;--border:rgba(114,149,207,0.18);--border2:rgba(132,173,240,0.28);--text:#eef4ff;--text2:#b4c5dd;--text3:#7d92b2;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);padding:20px 14px;}
-.page{max-width:1180px;margin:0 auto;}
-.hdr{background:linear-gradient(135deg,#10315c 0%,#0b57d0 62%,#0f766e 140%);border-radius:24px 24px 18px 18px;padding:1.4rem 1.6rem;color:#fff;box-shadow:var(--shadow);}
-.hdr-flex{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;}
-.hdr-kicker{font-size:.95rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.96;}
-.hdr h1{font-size:1.85rem;font-weight:800;margin-top:6px;}
-.hdr p{margin-top:8px;color:rgba(255,255,255,.88);font-size:.95rem;}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-.toolbar select,.toolbar button{min-height:42px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;padding:0 14px;font-weight:700;cursor:pointer;}
-.toolbar select option{color:#10233d;background:#fff;}
-.toolbar button:hover,.toolbar select:hover{background:rgba(255,255,255,.16);}
-.shell{background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 22px 22px;box-shadow:var(--shadow);overflow:hidden;}
-.content{padding:18px 22px;display:grid;gap:18px;}
-.panel{background:var(--card);border-radius:18px;border:1px solid var(--border);overflow:hidden;}
-.panel:hover{box-shadow:0 0 0 1px rgba(23,78,166,.05),0 12px 30px -22px rgba(11,87,208,.22);}
-.panel-hdr{background:var(--card2);padding:12px 18px;border-bottom:1px solid var(--border);font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2);}
-.panel-body{padding:18px;}
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;}
-.f{grid-column:span 12;display:flex;flex-direction:column;gap:7px;}
-.f6{grid-column:span 6;}
-.f4{grid-column:span 4;}
-.f8{grid-column:span 8;}
-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--text2);}
-label.req::after{content:" *";color:var(--red);}
-input,select,textarea{width:100%;background:#fff;border:1px solid var(--border2);border-radius:12px;padding:12px 14px;color:var(--text);font-size:.94rem;transition:.2s;font-family:inherit;}
-body.dark input,body.dark select,body.dark textarea{background:#0f1b2e;}
-textarea{min-height:146px;resize:vertical;line-height:1.55;}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(11,87,208,.15);}
-input[readonly]{background:var(--card2);cursor:default;color:var(--text3);}
-.split-input{display:flex;gap:10px;align-items:center;}
-.btn-sm,.btn-primary,.btn-secondary{min-height:40px;border-radius:12px;border:1px solid var(--border2);padding:0 14px;font-size:.82rem;font-weight:700;cursor:pointer;}
-.btn-sm,.btn-secondary{background:var(--card2);color:var(--text);}
-.btn-gold{background:linear-gradient(135deg,var(--accent),var(--primary));color:#fff;border:none;min-height:42px;padding:0 16px;border-radius:12px;font-weight:800;cursor:pointer;}
-.photo-upload-box{border:2px dashed var(--border2);border-radius:14px;background:var(--card2);padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:.2s;position:relative;min-height:140px;justify-content:center;}
-.photo-upload-box:hover{border-color:var(--primary);background:rgba(11,87,208,.04);}
-.photo-upload-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.photo-preview{width:100%;max-height:130px;object-fit:contain;border-radius:8px;display:none;}
-.photo-label-text{font-size:.82rem;font-weight:700;color:var(--text2);text-align:center;}
-.photo-icon{font-size:28px;opacity:.5;}
-.translate-panel{background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:14px;margin-top:14px;}
-.translate-panel-title{font-size:.78rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--text2);text-align:center;margin-bottom:10px;}
-.translate-controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center;}
-.translate-controls select{max-width:240px;min-width:200px;color:#10233d!important;background:#fff!important;}
-body.dark .translate-controls select{background:#0f1b2e!important;color:#eef4ff!important;}
-.translated-wrap{display:grid;gap:8px;margin-top:12px;}
-.translated-wrap[hidden]{display:none!important;}
-.char-row{display:flex;justify-content:space-between;gap:10px;align-items:center;}
-.affirm{display:flex;gap:12px;align-items:flex-start;background:var(--card2);padding:16px;border-radius:16px;}
-.affirm input[type=checkbox]{width:22px;height:22px;accent-color:var(--accent);margin-top:2px;flex-shrink:0;}
-.sig-box{border:2px dashed var(--border2);border-radius:18px;background:var(--surface);padding:8px;}
-canvas{width:100%;height:160px;display:block;border-radius:12px;background:var(--card);}
-.sig-badge{display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border-radius:999px;background:rgba(11,87,208,.08);border:1px solid rgba(11,87,208,.18);font-size:.82rem;font-weight:800;color:var(--text2);}
-.footer{background:var(--card2);padding:16px 18px;border-radius:0 0 18px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
-.status{font-weight:800;color:var(--accent);} 
-.front-sign-grid{display:grid;grid-template-columns:minmax(230px,1.45fr) minmax(140px,1fr) minmax(170px,1fr) minmax(160px,1fr);gap:12px;align-items:end;}
-.front-sign-signature{display:flex;flex-direction:column;gap:8px;}
-.front-sign-cell{display:flex;flex-direction:column;gap:7px;min-width:0;}
-.front-sign-actions{display:flex;gap:8px;flex-wrap:wrap;}
-.front-sign-cell .sig-badge{width:100%;justify-content:center;min-height:40px;}
-body.form-lang-ar .front-sign-grid{direction:rtl;}
-body.form-lang-ar .front-sign-actions{justify-content:flex-start;}
-.foot-actions{display:flex;gap:10px;flex-wrap:wrap;}
-.progress-overlay{position:fixed;inset:0;background:rgba(9,18,31,.38);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px;}
-.progress-overlay.show{display:flex;}
-.progress-card{width:min(420px,100%);background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:var(--shadow);text-align:center;}
-.progress-title{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:14px;}
-.progress-bar{height:12px;background:var(--surface);border-radius:999px;overflow:hidden;border:1px solid var(--border);}
-.progress-fill{height:100%;width:0%;background:linear-gradient(135deg,var(--primary),var(--accent));transition:width .18s ease;}
-.progress-note{margin-top:10px;color:var(--text2);font-size:.84rem;}
-body.form-lang-en{direction:ltr;}
-body.form-lang-ar{direction:rtl;}
-body.form-lang-ar input:not([type=datetime-local]):not([type=date]),body.form-lang-ar select,body.form-lang-ar textarea,body.form-lang-ar label,body.form-lang-ar .panel-hdr,body.form-lang-ar .affirm-text,body.form-lang-ar .status{text-align:right!important;direction:rtl!important;}
-body.form-lang-ar .toolbar,body.form-lang-ar .foot-actions{direction:ltr;}
-body.form-lang-ar .toolbar button,body.form-lang-ar .toolbar select{display:inline-flex;visibility:visible;opacity:1;}
-/* PRINT REPORT */
-.print-report{display:none;background:#fff;color:#111827;width:794px;max-width:794px;margin:0 auto;padding:20px 20px;box-sizing:border-box;border:1px solid #d6e0ea;border-radius:14px;font-family:'Segoe UI',Arial,sans-serif;}
-.corp-header{display:flex;align-items:stretch;border-bottom:2px solid #0b57d0;margin-bottom:12px;padding-bottom:10px;gap:14px;}
-.corp-logo-box{width:64px;min-width:64px;display:flex;align-items:center;justify-content:center;}
-.corp-logo-circle{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#10315c,#0b57d0);display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;font-weight:900;letter-spacing:-.02em;}
-.corp-title-block{flex:1;}
-.corp-dept{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#0b57d0;margin-bottom:2px;}
-.corp-title{font-size:18px;font-weight:800;color:#0f172a;margin-bottom:2px;line-height:1.15;}
-.corp-meta{font-size:9.5px;color:#64748b;}
-.corp-stamp{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:4px;}
-.corp-stamp-badge{font-size:10px;font-weight:800;letter-spacing:.06em;padding:4px 10px;border-radius:4px;background:#e7f0fb;color:#0b57d0;border:1px solid #b5d4f4;text-transform:uppercase;}
-.corp-ref{display:none!important;}
-.section-divider{height:1px;background:#e2e8f0;margin:9px 0;}
-.report-section-title{font-size:9px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#0b57d0;margin-bottom:6px;padding-left:7px;border-left:3px solid #0b57d0;}
-.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
-.report-card{border:1px solid #dde6f0;border-radius:8px;overflow:hidden;}
-.report-card.full{grid-column:1/-1;}
-.report-card-hdr{background:#f4f8fc;border-bottom:1px solid #dde6f0;padding:6px 10px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#1e3a5f;}
-.report-table{width:100%;border-collapse:collapse;}
-.report-table tr td,.report-table tr th{border-bottom:1px solid #edf2f7;}
-.report-table th{width:34%;padding:5px 9px;font-size:9.5px;font-weight:700;color:#475569;background:#f8fafc;text-align:left;vertical-align:top;}
-.report-table td{padding:5px 9px;font-size:9.5px;color:#1e293b;text-align:left;vertical-align:top;word-break:break-word;}
-.report-text-box{padding:9px 10px;font-size:10px;line-height:1.5;color:#1e293b;white-space:pre-wrap;unicode-bidi:plaintext;word-break:break-word;min-height:44px;}
-.affirmation-block{grid-column:1/-1;border:1px solid #b5d4f4;border-radius:8px;background:#f0f7ff;padding:8px 10px;}
-.affirmation-block .aff-en{font-size:9.5px;line-height:1.55;color:#1e293b;direction:ltr;text-align:left;}
-.affirmation-block .aff-ar{font-size:10px;line-height:1.7;color:#1e293b;direction:rtl;text-align:right;font-family:'Noto Naskh Arabic',Tahoma,Arial,sans-serif;}
-.affirmation-block .aff-ur{font-size:10px;line-height:1.9;color:#1e293b;direction:rtl;text-align:right;font-family:'Noto Nastaliq Urdu','Noto Naskh Arabic',Tahoma,Arial,sans-serif;}
-.sig-section{grid-column:1/-1;border:1px solid #dde6f0;border-radius:8px;overflow:hidden;}
-.sig-layout{display:grid;grid-template-columns:120px 1fr 1fr 1fr;gap:0;align-items:stretch;}
-.sig-left{padding:8px;border-right:1px solid #dde6f0;display:flex;flex-direction:column;gap:5px;justify-content:center;min-width:0;}
-.sig-img-box{width:100%;height:72px;border:1.5px dashed #b5d4f4;border-radius:8px;background:#f8fafc;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.sig-img-box img{max-width:100%;max-height:60px;object-fit:contain;}
-.sig-right{display:contents;}
-.sig-cell{padding:8px 9px;border-right:1px solid #dde6f0;display:flex;flex-direction:column;justify-content:center;gap:4px;min-width:0;}
-.sig-cell:last-child{border-right:none;}
-.sig-field{display:flex;align-items:center;justify-content:center;text-align:center;border:1px solid #dde6f0;border-radius:8px;padding:7px 9px;font-size:9.5px;color:#1e293b;min-height:34px;display:flex;align-items:center;}
-.sig-pill{display:flex;justify-content:center;text-align:center;border-radius:999px;padding:6px 10px;font-size:9px;font-weight:800;background:#eef3fb;color:#1e3a5f;border:1px solid #b5d4f4;display:inline-flex;align-items:center;justify-content:center;min-height:32px;width:100%;}
-.sig-label{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:3px;text-align:center;}
-.sig-left .sig-label{text-align:left;}
-#printReport .sig-layout,
-.pdf-page-template .sig-layout,
-#pdfPageRenderArea .sig-layout{display:grid!important;grid-template-columns:120px minmax(120px,1fr) minmax(150px,1fr) minmax(140px,1fr)!important;}
-#printReport .sig-right,
-.pdf-page-template .sig-right,
-#pdfPageRenderArea .sig-right{display:contents!important;}
-#printReport .sig-cell,
-.pdf-page-template .sig-cell,
-#pdfPageRenderArea .sig-cell{border-top:none!important;}
-.photos-section{grid-column:1/-1;border:1px solid #dde6f0;border-radius:8px;overflow:hidden;}
-.photos-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
-.photo-panel{padding:10px;display:flex;flex-direction:column;gap:6px;}
-.photo-panel:first-child{border-right:1px solid #dde6f0;}
-.photo-panel-label{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#475569;}
-.photo-img-box{border:1.5px solid #cfd8e3;border-radius:10px;background:#ffffff;border-radius:8px;background:#f8fafc;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:124px;}
-.photo-img-box img{max-width:100%;max-height:148px;object-fit:contain;display:block;}
-.photo-img-box .no-photo{font-size:9px;color:#94a3b8;text-align:center;padding:16px;}
-.print-footer{margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;}
-.print-footer-left{font-size:8.8px;color:#94a3b8;}
-.print-footer-right{font-size:8.8px;color:#94a3b8;}
-.confidential-badge{font-size:8px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#dc2626;border:1px solid #fca5a5;background:#fef2f2;padding:3px 7px;border-radius:4px;}
+html{background:var(--bg)}
+body{background:linear-gradient(180deg,#e9eef3 0,#f2f5f7 240px,#eef2f5 100%);padding:24px 14px 38px;color:var(--text)}
+.page{max-width:1180px}
+.hdr{position:relative;background:linear-gradient(118deg,#0d2947 0%,#153a60 60%,#1e4d79 100%);border-radius:20px 20px 0 0;padding:22px 28px 20px;box-shadow:0 18px 40px -28px rgba(4,23,42,.8);overflow:hidden}
+.hdr::after{content:'';position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,#b68f2c,#d5b65d,#b68f2c)}
+.hdr-flex{align-items:center}
+.hdr-brand{display:flex;align-items:center;gap:14px;min-width:0}
+.hdr-mark{width:46px;height:46px;border:2px solid #d2ad50;border-radius:14px;display:grid;place-items:center;color:#e1bf65;font-size:22px;font-weight:900;background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.hdr-kicker{font-size:11px;font-weight:800;letter-spacing:.16em;color:#f4f7fb;opacity:.92;margin-bottom:3px}
+.hdr h1{font-size:28px;font-weight:800;line-height:1.08;margin:0;letter-spacing:-.02em;color:#fff}
+.hdr p{margin:7px 0 0;font-size:13px;font-weight:700;letter-spacing:.04em;color:#d8e4ef}
+.hdr-side{margin-left:auto;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.confidential-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid rgba(215,181,89,.45);border-radius:999px;background:rgba(8,30,52,.38);color:#f2d47e;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.hdr-side small{font-size:10px;color:#cedae6}
+.shell{background:#f7f9fb;border:1px solid #d7e0e8;border-top:0;border-radius:0 0 20px 20px;box-shadow:var(--shadow)}
+.content{padding:24px 26px 26px}
+.type-tabs{max-width:680px;margin:0 auto 24px;gap:4px;padding:5px;background:#e7edf3;border:1px solid #d8e1ea;border-radius:14px;box-shadow:inset 0 1px 2px rgba(17,42,67,.04)}
+.type-tab{min-height:46px;border-radius:10px;color:#405a73;font-size:14px;letter-spacing:.01em}
+.type-tab:hover{background:#f8fafc;color:#163d65}
+.type-tab.active{background:linear-gradient(180deg,#183f67,#123657);color:#fff;box-shadow:0 7px 16px -9px rgba(13,41,71,.85)}
+form,.form-mode{gap:18px}
+.panel{border:1px solid #d8e1e9;border-radius:15px;background:#fff;box-shadow:0 10px 28px -25px rgba(18,51,82,.55);overflow:hidden}
+.panel-hdr{position:relative;background:#fff;padding:15px 18px 14px 28px;border-bottom:1px solid #e1e7ed;color:#153a60;font-size:12px;font-weight:800;letter-spacing:.08em}
+.panel-hdr::before{content:'';position:absolute;left:14px;top:13px;bottom:13px;width:4px;border-radius:4px;background:#c7a44a}
+.panel-body{padding:18px}
+.form-subtitle{display:none}
+.form-table{border:1px solid #d5dee7;border-radius:12px;overflow:hidden;border-collapse:separate;border-spacing:0;background:#fff}
+.form-table th,.form-table td{border:0;border-right:1px solid #e1e7ed;border-bottom:1px solid #e1e7ed;padding:9px 11px;vertical-align:middle}
+.form-table tr:last-child th,.form-table tr:last-child td{border-bottom:0}
+.form-table tr>*:last-child{border-right:0}
+.form-table th{background:#f3f6f9;color:#425970;font-weight:700}
+.form-table td{background:#fff}
+.info-table th{width:16%}.info-table td{width:34%}
+label{font-size:13px;font-weight:800;letter-spacing:.015em;color:#41566d;text-transform:none;line-height:1.25}
+label.req::after{color:#b33636;font-weight:900}
+input,select,textarea{min-height:42px;border:1px solid #c7d3df;border-radius:9px;background:#fff;padding:9px 11px;color:#172a3f;font-size:15px;font-weight:400;box-shadow:inset 0 1px 2px rgba(21,58,96,.025);transition:border-color .16s ease,box-shadow .16s ease,background .16s ease}
+input:hover,select:hover,textarea:hover{border-color:#aebdcb}
+input:focus,select:focus,textarea:focus{border-color:#214f7b;box-shadow:0 0 0 3px rgba(33,79,123,.10);background:#fff}
+input[readonly]{background:#f5f7f9;color:#65778a;border-color:#d8e0e7}
+select{cursor:pointer}
+textarea{min-height:205px;line-height:1.6;padding:13px 14px;resize:vertical}
+.char-row{margin-bottom:10px}.char-row>span{padding:4px 8px;border-radius:999px;background:#f2f5f8;color:#7a8b9e!important;font-size:10px!important;font-weight:700}
+.inline-subject{grid-template-columns:minmax(220px,1fr) minmax(220px,1fr)}
+.split-input{gap:8px}
+.btn-sm,.btn-secondary,.btn-gold{min-height:40px;border-radius:9px;font-size:12px;font-weight:800;padding:0 16px;transition:transform .12s ease,box-shadow .16s ease,background .16s ease,border-color .16s ease}
+.btn-sm,.btn-secondary{background:#fff;color:#234767;border:1px solid #bfcbd7}
+.btn-sm:hover,.btn-secondary:hover{background:#f4f7fa;border-color:#9fb1c2}
+.btn-sm:active,.btn-secondary:active,.btn-gold:active{transform:translateY(1px)}
+.btn-gold{background:#153a60;color:#fff;border:1px solid #153a60;box-shadow:0 8px 18px -12px rgba(21,58,96,.9)}
+.btn-gold:hover{background:#0d2947;border-color:#0d2947}
+.affirm{border:1px solid #d7e2eb;background:#f7fafc;border-radius:12px;padding:14px 16px;color:#40566c;font-size:13px;line-height:1.55}
+.affirm input{accent-color:#153a60;margin-top:1px}
+.sig-box{position:relative;border:1.5px dashed #8eabc3;border-radius:12px;background:#fff;padding:8px;box-shadow:inset 0 0 0 3px #f7fafc}
+.sig-box::after{content:'Sign inside this area';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:12px;font-weight:700;color:#b4c1cc;pointer-events:none;white-space:nowrap}
+.sig-box:has(canvas:not(:empty))::after{opacity:.45}
+.sig-box canvas{height:185px;border-radius:8px;background:transparent;position:relative;z-index:1}
+.front-sign-actions{margin-top:10px}
+.sig-badge{min-height:34px;border-radius:999px;background:#f0f5f9;border:1px solid #d5e0e8;color:#536b82;font-size:11px}
+.photo-upload-box{min-height:145px;border:1.5px dashed #9db1c3;border-radius:12px;background:#f8fafc;transition:.16s}
+.photo-upload-box:hover{background:#f1f6fa;border-color:#6788a5}
+.photo-icon{font-size:26px}.photo-label-text{font-size:12px;color:#5b7187}
+.footer{margin-top:2px;background:#fff;border:1px solid #d7e0e8;border-radius:14px;padding:14px 16px;box-shadow:0 8px 22px -24px rgba(18,51,82,.7)}
+.status{font-size:12px;font-weight:800;color:#28735a}
+.foot-actions{gap:9px}
+#resetBtn{background:#fff7f7;color:#8e3434;border-color:#e7caca}
+#resetBtn:hover{background:#fceeee;border-color:#dbaaaa}
+.progress-overlay{backdrop-filter:blur(2px);background:rgba(8,25,44,.48)}
+.progress-card{border:1px solid #d7e0e8;border-radius:16px}
+.progress-title{color:#173b60}.progress-bar{height:9px;background:#e8edf2}.progress-fill{background:linear-gradient(90deg,#153a60,#c7a44a)}
+@media(max-width:900px){.hdr h1{font-size:24px}.content{padding:18px}.info-table th{width:18%}.info-table td{width:32%}}
+@media(max-width:760px){body{padding:10px 7px 22px}.hdr{padding:18px 16px}.hdr-brand{align-items:flex-start}.hdr-mark{width:40px;height:40px;border-radius:12px}.hdr h1{font-size:21px}.hdr-side{width:100%;align-items:flex-start;text-align:left;margin:4px 0 0 54px}.content{padding:14px 10px 16px}.type-tabs{margin-bottom:16px}.type-tab{font-size:12px;min-height:43px}.panel{border-radius:13px}.panel-body{padding:11px}.panel-hdr{padding:13px 15px 12px 26px}.panel-hdr::before{left:12px;top:11px;bottom:11px}.info-table,.info-table tbody,.info-table tr,.info-table th,.info-table td{display:block;width:100%!important}.info-table tr{border-bottom:0}.info-table th,.info-table td{border-right:0!important}.info-table th{padding:10px 10px 5px;background:#f6f8fa;border-bottom:0}.info-table td{padding:5px 10px 11px;border-bottom:1px solid #e1e7ed}.inline-subject{grid-template-columns:1fr}.form-table:not(.info-table) th,.form-table:not(.info-table) td{display:block;width:100%;border-right:0}.form-table:not(.info-table) th{border-bottom:0;padding-bottom:5px}.form-table:not(.info-table) td{padding-top:5px}.sig-box canvas{height:170px}.footer{align-items:stretch}.status{width:100%}.foot-actions{display:grid;grid-template-columns:1fr 1fr;width:100%}.foot-actions button{width:100%}}
+@media(max-width:430px){.hdr h1{font-size:19px}.hdr-kicker{font-size:10px}.hdr-side{margin-left:0}.confidential-chip{font-size:9px}.type-tab{font-size:11px}.foot-actions{grid-template-columns:1fr}}
 
-/* RTL print */
-#printReport.rtl{direction:rtl;}
-#printReport.rtl .report-table th{text-align:right;}
-#printReport.rtl .report-table td{text-align:right;}
-#printReport.rtl .report-section-title{border-left:none;border-right:3px solid #0b57d0;padding-left:0;padding-right:8px;}
-#printReport.rtl .report-text-box{text-align:right;direction:rtl;}
-#printReport.rtl .corp-header{flex-direction:row-reverse;}
-#printReport.rtl .corp-dept,#printReport.rtl .corp-title,#printReport.rtl .corp-meta{text-align:right;}
-#printReport.rtl .corp-stamp{align-items:flex-start;}
-#printReport.rtl .sig-layout{grid-template-columns:minmax(140px,1fr) minmax(150px,1fr) minmax(120px,1fr) 120px!important;}
-#printReport.rtl .sig-left{border-right:none;border-left:1px solid #dde6f0;}
-#printReport.rtl .sig-cell{border-right:none;border-left:1px solid #dde6f0;}
-#printReport.rtl .sig-cell:last-child{border-left:none;}
-#printReport.rtl .photo-panel:first-child{border-right:none;border-left:1px solid #dde6f0;}
-#printReport.rtl .print-footer{flex-direction:row-reverse;}
+/* ===== v7 ULTRA COMMERCIAL UI ENHANCEMENT ===== */
+body::before{content:'';position:fixed;inset:0 0 auto 0;height:220px;background:radial-gradient(circle at 18% 0%,rgba(199,164,74,.12),transparent 34%),radial-gradient(circle at 82% 0%,rgba(35,83,126,.16),transparent 32%);pointer-events:none;z-index:-1}
+.page{position:relative}
+.hdr{border:1px solid rgba(255,255,255,.08);box-shadow:0 24px 55px -32px rgba(5,24,43,.9)}
+.hdr-mark{background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.015));box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 8px 20px -14px #000}
+.shell{backdrop-filter:blur(8px)}
+.type-tabs{padding:6px;border-color:#ccd8e2;background:linear-gradient(180deg,#edf2f6,#e3eaf0);box-shadow:inset 0 1px 3px rgba(15,41,71,.07),0 8px 20px -18px rgba(15,41,71,.65)}
+.type-tab{position:relative;overflow:hidden}
+.type-tab.active::after{content:'';position:absolute;left:18%;right:18%;bottom:0;height:3px;border-radius:3px 3px 0 0;background:#d1ab4c}
+.panel{transition:transform .16s ease,box-shadow .18s ease,border-color .18s ease;box-shadow:0 14px 34px -30px rgba(15,41,71,.7)}
+.panel:hover{border-color:#cbd8e3;box-shadow:0 20px 42px -30px rgba(15,41,71,.72)}
+.panel-hdr{background:linear-gradient(180deg,#ffffff,#f8fafc);font-size:13px;letter-spacing:.07em}
+.panel-hdr::after{content:'';position:absolute;right:18px;top:50%;width:34px;height:1px;background:#d7b45a;opacity:.8}
+.form-table{box-shadow:0 1px 0 rgba(255,255,255,.8),inset 0 0 0 1px rgba(255,255,255,.55)}
+.form-table th{background:linear-gradient(180deg,#f5f8fa,#eef3f6)}
+.form-table tr:hover td{background:#fbfdff}
+input,select,textarea{box-shadow:inset 0 1px 2px rgba(15,41,71,.035),0 1px 0 rgba(255,255,255,.85)}
+input:focus,select:focus,textarea:focus{border-color:#1c527f;box-shadow:0 0 0 3px rgba(28,82,127,.10),0 8px 18px -16px rgba(15,41,71,.85)}
+textarea{background:linear-gradient(180deg,#fff,#fdfefe)}
+.affirm{position:relative;overflow:hidden;background:linear-gradient(180deg,#fbfcfd,#f4f8fb)}
+.affirm::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:#c7a44a}
+.sig-box{background:linear-gradient(180deg,#fff,#fbfdff);box-shadow:inset 0 0 0 3px #f6f9fb,0 8px 22px -20px rgba(15,41,71,.8)}
+.photo-upload-box{background:linear-gradient(180deg,#fbfdff,#f4f8fb)}
+.footer{border-top:3px solid #153a60;box-shadow:0 16px 34px -30px rgba(15,41,71,.8)}
+.btn-gold{background:linear-gradient(180deg,#1b4a76,#123657);box-shadow:0 10px 22px -14px rgba(15,41,71,.95)}
+.btn-gold:hover{background:linear-gradient(180deg,#153f68,#0b2b49);box-shadow:0 12px 24px -13px rgba(15,41,71,.98)}
+/* ===== END v7 ULTRA COMMERCIAL UI ENHANCEMENT ===== */
 
-@media (max-width:900px){.f6,.f4,.f8{grid-column:span 12;}.front-sign-grid,.report-grid,.photos-grid{grid-template-columns:1fr;}.sig-layout{grid-template-columns:1fr;}.sig-right{display:block;}.sig-cell{border-right:none;border-left:none;border-top:1px solid #dde6f0;}}
-@media (max-width:640px){body{padding:10px 8px;}.hdr{padding:1rem;}.content{padding:12px;gap:12px;}.panel-body{padding:12px;}.toolbar,.foot-actions,.translate-controls,.split-input,.char-row{flex-direction:column;align-items:stretch;}.toolbar select,.toolbar button,.foot-actions button,.translate-controls select,.translate-controls button,.split-input>*{width:100%;}}
-@media print{body,body.dark{background:#fff!important;color:#111!important;padding:0;}.hdr,.shell,.page>*:not(.print-report){display:none!important;}.print-report{display:block!important;width:190mm!important;max-width:190mm!important;padding:8mm 7mm!important;}@page{size:A4;margin:8mm;}}
+/* ===== END EXECUTIVE SECURITY BLUE ===== */
 
-/* Force desktop signature layout inside PDF render area */
-#printReport .sig-layout,
-.pdf-page-template .sig-layout,
-#pdfPageRenderArea .sig-layout{grid-template-columns:120px minmax(120px,1fr) minmax(150px,1fr) minmax(140px,1fr)!important;}
-#printReport.rtl .sig-layout,
-.pdf-page-template.rtl .sig-layout,
-#pdfPageRenderArea .pdf-page-template.rtl .sig-layout{grid-template-columns:minmax(140px,1fr) minmax(150px,1fr) minmax(120px,1fr) 120px!important;}
-#printReport .sig-right,
-.pdf-page-template .sig-right,
-#pdfPageRenderArea .sig-right{display:contents!important;}
-#printReport .sig-cell,
-.pdf-page-template .sig-cell,
-#pdfPageRenderArea .sig-cell{border-top:none!important;}
 
-/* ===== FIX: Prevent photos from breaking across pages ===== */
-.photos-section {
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
+/* v6 precision alignment */
+.info-table{table-layout:fixed;width:100%}
+.info-table th:nth-child(1),.info-table th:nth-child(3){width:17%}
+.info-table td:nth-child(2),.info-table td:nth-child(4){width:33%}
+.info-table th,.info-table td{vertical-align:middle}
+.info-table input,.info-table select,.info-table textarea{font-size:15px;font-weight:400}
+@media(max-width:700px){.form-table label{font-size:13px!important;font-weight:800!important}.form-table input,.form-table select,.form-table textarea{font-size:15px!important;font-weight:400!important}}
+
+/* v8: acknowledgment statement typography */
+.affirm > div:not(:first-child){
+  font-size:13px !important;
+  font-weight:700 !important;
+  line-height:1.55;
+  color:var(--text);
 }
 
-.photo-panel {
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
+/* ===== v9 PC + PHONE RESPONSIVE HARDENING ===== */
+html,body{max-width:100%;overflow-x:hidden}
+.page,.shell,.content,.panel,.panel-body,form{min-width:0;max-width:100%}
+input,select,textarea,button{max-width:100%}
+input,select,textarea{min-width:0}
+.info-table{width:100%;table-layout:fixed}
+.info-table th,.info-table td{overflow-wrap:anywhere;word-break:normal}
+textarea{width:100%;max-width:100%;resize:vertical}
+.sig-box{width:100%;min-width:0;overflow:hidden}
+.sig-box canvas{width:100%!important;max-width:100%;touch-action:none}
+.foot-actions{max-width:100%}
+.type-tabs{width:100%;min-width:0}
+.type-tab{min-width:0}
+@media(min-width:761px){
+  .info-table th{width:18%}
+  .info-table td{width:32%}
+}
+@media(max-width:760px){
+  body{width:100%;padding-left:7px;padding-right:7px}
+  .page{width:100%}
+  .hdr,.shell{width:100%;max-width:100%}
+  .hdr-flex{gap:10px}
+  .type-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .type-tab{width:100%;padding:0 8px;white-space:normal;line-height:1.2}
+  .info-table,.info-table tbody,.info-table tr,.info-table th,.info-table td{display:block;width:100%!important;max-width:100%!important}
+  .info-table th{font-size:13px!important;font-weight:800!important}
+  .info-table td input,.info-table td select,.info-table td textarea,
+  .form-table td input,.form-table td select,.form-table td textarea{font-size:15px!important;font-weight:400!important;width:100%!important}
+  .panel-body{overflow:hidden}
+  .foot-actions{display:grid!important;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+  .foot-actions button{width:100%!important;min-width:0;padding-left:10px;padding-right:10px}
+}
+@media(max-width:430px){
+  .content{padding-left:8px;padding-right:8px}
+  .panel-body{padding-left:8px;padding-right:8px}
+  .type-tab{font-size:11px}
+  .foot-actions{grid-template-columns:1fr}
 }
 
-.photo-img-box {
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
+
+/* ===== v10: Rounded personal-information table ===== */
+.info-table{
+  border-radius:16px!important;
+  overflow:hidden!important;
+  border:1px solid #d3dde7!important;
+  box-shadow:0 5px 16px rgba(15,39,71,.06)!important;
+  background:#fff!important;
 }
-
-/* Optional: keep photos on a dedicated page */
-.photos-section {
-  page-break-before: auto;
+.info-table tr:first-child th:first-child{border-top-left-radius:15px!important;}
+.info-table tr:first-child td:last-child{border-top-right-radius:15px!important;}
+.info-table tr:last-child th:first-child{border-bottom-left-radius:15px!important;}
+.info-table tr:last-child td:last-child{border-bottom-right-radius:15px!important;}
+@media(max-width:760px){
+  .info-table{border-radius:14px!important;}
+  .info-table tr:first-child th:first-child{border-top-left-radius:13px!important;border-top-right-radius:13px!important;}
+  .info-table tr:last-child td:last-child{border-bottom-left-radius:13px!important;border-bottom-right-radius:13px!important;}
 }
-/* ===== END FIX ===== */
-
-
-/* ===== PDF PAGE SPLIT FIX ===== */
-#pdfPageRenderArea .print-report{
-  display:block !important;
-  visibility:visible !important;
-  position:relative !important;
-  left:auto !important;
-  top:auto !important;
-  margin:0 auto 20px auto !important;
-  page-break-inside:avoid !important;
-  break-inside:avoid !important;
-}
-#pdfPageRenderArea .photo-img-box{
-  min-height:180px !important;
-}
-#pdfPageRenderArea .photo-img-box img{
-  max-height:170px !important;
-  object-fit:contain !important;
-}
-.pdf-page-template.rtl{direction:rtl;}
-.pdf-page-template.rtl .report-table th,
-.pdf-page-template.rtl .report-table td{text-align:right;}
-.pdf-page-template.rtl .report-section-title{border-left:none;border-right:3px solid #0b57d0;padding-left:0;padding-right:8px;}
-.pdf-page-template.rtl .corp-header{flex-direction:row-reverse;}
-.pdf-page-template.rtl .corp-dept,
-.pdf-page-template.rtl .corp-title,
-.pdf-page-template.rtl .corp-meta{text-align:right;}
-.pdf-page-template.rtl .corp-stamp{align-items:flex-start;}
-.pdf-page-template.rtl .sig-layout{grid-template-columns:minmax(140px,1fr) minmax(150px,1fr) minmax(120px,1fr) 120px!important;}
-.pdf-page-template.rtl .sig-left{border-right:none;border-left:1px solid #dde6f0;}
-.pdf-page-template.rtl .sig-cell{border-right:none;border-left:1px solid #dde6f0;}
-.pdf-page-template.rtl .sig-cell:last-child{border-left:none;}
-.pdf-page-template.rtl .photo-panel:first-child{border-right:none;border-left:1px solid #dde6f0;}
-.pdf-page-template.rtl .print-footer{flex-direction:row-reverse;}
-/* ===== END PDF PAGE SPLIT FIX ===== */
-
-
-.page1-photos-wrap .photo-img-box{min-height:110px;}
-.page1-photos-wrap .photo-img-box img{max-height:130px;}
-
+/* ===== end v10 ===== */
 </style>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
-<body class="form-lang-en">
+<body>
 <div class="page">
-  <header class="hdr">
-    <div class="hdr-flex">
-      <div>
-        <div class="hdr-kicker" id="hdrDept">Security Department</div>
-        <h1 id="hdrTitle">Investigation Written Statement</h1>
-        <p id="hdrSub">Professional written statement form — contractor / visitor</p>
-      </div>
-      <div class="toolbar">
-        <select id="languageSelect" aria-label="Form Language"><option value="en">English</option><option value="ar">العربية</option></select>
-        <button class="btn-secondary" id="themeBtn" type="button">Dark Theme</button>
-      </div>
-    </div>
-  </header>
-  <div class="shell">
-    <div class="content">
-      <form id="sf" novalidate>
-
-        <!-- Statement Info -->
-        <div class="panel">
-          <div class="panel-hdr" id="panelInfoLbl">Statement Information</div>
-          <div class="panel-body">
-            <div class="grid">
-              <div class="f f6"><label class="req" id="lblProperty">Property Name</label><input id="propertyName" required></div>
-              <div class="f f6"><label class="req" id="lblDateTime">Date &amp; Time Written</label><input id="statementDateTime" type="datetime-local" required readonly></div>
-              <div class="f f6"><label class="req" id="lblSubject">Subject</label><select id="subject" required></select></div>
-              <div class="f f6" id="customSubjectWrap" style="display:none"><label id="lblCustomSubject">Custom Subject</label><input id="customSubject"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Person Info -->
-        <div class="panel">
-          <div class="panel-hdr" id="panelPersonLbl">Person Information</div>
-          <div class="panel-body">
-            <div class="grid">
-              <div class="f f6"><label class="req" id="lblPersonName">Person Name</label><input id="employeeName" required></div>
-              <div class="f f6"><label class="req" id="lblPhone">Phone Number</label><input id="phoneNumber" required type="tel" placeholder="+971 50 000 0000"></div>
-              <div class="f f6"><label class="req" id="lblCompany">Company Name</label><input id="companyName" required></div>
-              <div class="f f6" id="deptSelectWrap"><label class="req" id="lblDept">Host Department</label><div class="split-input"><select id="deptSelect" required></select><button class="btn-sm" id="useCustomDept" type="button" id="btnType">Type</button></div></div>
-              <div class="f f6" id="deptCustomWrap" style="display:none"><label id="lblDept2">Host Department</label><div class="split-input"><input id="deptCustom"><button class="btn-sm" id="useSelectDept" type="button" id="btnSel">Select</button></div></div>
-              <div class="f f6"><label id="lblLocation">Incident Location</label><input id="incidentLocation" placeholder="e.g., Lobby, Pool area"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ID Photos -->
-        <div class="panel">
-          <div class="panel-hdr" id="panelPhotoLbl">ID Document Photos</div>
-          <div class="panel-body">
-            <div class="grid">
-              <div class="f f6">
-                <label class="req" id="lblFrontPhoto">ID Front Page</label>
-                <div class="photo-upload-box" id="frontBox">
-                  <input type="file" id="frontPhotoInput" accept="image/*" capture="environment">
-                  <span class="photo-icon">🪪</span>
-                  <span class="photo-label-text" id="frontPhotoHint">Tap to upload ID front page</span>
-                  <img id="frontPhotoPreview" class="photo-preview" alt="ID Front">
-                </div>
-                <input type="hidden" id="frontPhotoData">
-              </div>
-              <div class="f f6">
-                <label id="lblBackPhoto">ID Back Page <span style="font-size:.65rem;color:var(--text3);font-weight:600;">(Optional)</span></label>
-                <div class="photo-upload-box" id="backBox">
-                  <input type="file" id="backPhotoInput" accept="image/*" capture="environment">
-                  <span class="photo-icon" id="backPhotoIcon">🔄</span>
-                  <span class="photo-label-text" id="backPhotoHint">Tap to upload ID back page</span>
-                  <img id="backPhotoPreview" class="photo-preview" alt="ID Back">
-                </div>
-                <input type="hidden" id="backPhotoData">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Narrative -->
-        <div class="panel">
-          <div class="panel-hdr" id="panelNarrLbl">Statement Narrative</div>
-          <div class="panel-body">
-            <div class="f">
-              <div class="char-row"><label class="req" id="lblDetails">Full Details</label><span id="charCount" style="font-size:.72rem;color:var(--text3);">0 characters</span></div>
-              <textarea id="statementDetails" rows="7" required placeholder="Describe the incident with full detail, timeline, persons involved, actions taken..."></textarea>
-              <div class="translate-panel">
-                <div class="translate-panel-title" id="translatePanelTitle">Translation</div>
-                <div class="translate-controls">
-                  <select id="translateTarget">
-                    <option value="ar">Arabic</option><option value="en">English</option><option value="fr">French</option><option value="es">Spanish</option><option value="de">German</option><option value="it">Italian</option><option value="pt">Portuguese</option><option value="ru">Russian</option><option value="tr">Turkish</option><option value="hi">Hindi</option><option value="ur">Urdu</option><option value="zh">Chinese</option><option value="ja">Japanese</option><option value="ko">Korean</option><option value="fa">Persian</option><option value="tl">Tagalog</option>
-                  </select>
-                  <button class="btn-secondary" id="translateStatementBtn" type="button">Translate Statement</button>
-                  <button class="btn-secondary" id="clearTranslateBtn" type="button">Clear Translation</button>
-                </div>
-                <div class="translated-wrap" id="translatedWrap" hidden>
-                  <label id="lblTranslated">Translated Statement</label>
-                  <textarea id="translatedStatement" rows="5"></textarea>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Acknowledgment -->
-        <div class="panel">
-          <div class="panel-hdr" id="panelAckLbl">Acknowledgment &amp; Signature</div>
-          <div class="panel-body">
-            <div class="grid">
-              <div class="f"><div class="affirm"><input type="checkbox" id="affirmation"><div class="affirm-text" id="affirmText">I affirm that this statement was made voluntarily, without threat or coercion, and all information provided is truthful and correct to the best of my knowledge.</div></div></div>
-              <div class="f">
-                <div class="front-sign-grid">
-                  <div class="front-sign-signature">
-                    <label class="req" id="lblSignature">Signature (draw below)</label>
-                    <div class="sig-box"><canvas id="sigCanvas" width="500" height="160"></canvas></div>
-                    <div class="front-sign-actions"><button class="btn-sm" type="button" id="clearSig">Clear</button><button class="btn-sm" type="button" id="undoSig">Undo</button></div>
-                    <input type="hidden" id="sigData">
-                  </div>
-                  <div class="front-sign-cell">
-                    <label class="req" id="lblSignedBy">Signed By (Print Name)</label>
-                    <input id="sigName" required>
-                  </div>
-                  <div class="front-sign-cell">
-                    <label>&nbsp;</label>
-                    <div class="sig-badge" id="sigBadge">Not signed</div>
-                  </div>
-                  <div class="front-sign-cell">
-                    <label id="lblSignedAt">Signed Date &amp; Time</label>
-                    <input id="sigAt" readonly>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="footer">
-          <div class="status" id="statusMsg"></div>
-          <div class="foot-actions">
-            <button class="btn-gold" type="button" id="printBtn">Generate PDF Report</button>
-            <button class="btn-sm" type="reset" id="resetBtn">Reset Form</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- PRINT REPORT -->
-  <section class="print-report" id="printReport">
-    <div class="corp-header">
-      <div class="corp-logo-box"><div class="corp-logo-circle" id="corpLogoInitials">SEC</div></div>
-      <div class="corp-title-block">
-        <div class="corp-dept" id="printDept">Security Department</div>
-        <div class="corp-title" id="printTitle">Investigation Written Statement</div>
-        <div class="corp-meta" id="printMeta"></div>
-      </div>
-      <div class="corp-stamp">
-        <div class="corp-stamp-badge" id="printStampBadge">CONFIDENTIAL</div>
-        <div class="corp-ref" id="printRef"></div>
-      </div>
-    </div>
-
-    <div class="report-section-title" id="pSecInfo">Statement Information</div>
-    <div class="report-grid" style="margin-bottom:14px;">
-      <div class="report-card">
-        <div class="report-card-hdr" id="pCardInfoHdr">Statement Details</div>
-        <table class="report-table">
-          <tr><th id="pThProperty">Property</th><td id="rProperty"></td></tr>
-          <tr><th id="pThDate">Date &amp; Time</th><td id="rDate"></td></tr>
-          <tr><th id="pThSubject">Subject</th><td id="rSubject"></td></tr>
-        </table>
-      </div>
-      <div class="report-card">
-        <div class="report-card-hdr" id="pCardPersonHdr">Person Details</div>
-        <table class="report-table">
-          <tr><th id="pThName">Person Name</th><td id="rEmployeeName"></td></tr>
-          <tr><th id="pThPhone">Phone Number</th><td id="rPhone"></td></tr>
-          <tr><th id="pThCompany">Company</th><td id="rCompanyName"></td></tr>
-          <tr><th id="pThDept">Host Dept.</th><td id="rDepartment"></td></tr>
-          <tr><th id="pThLocation">Location</th><td id="rLocation"></td></tr>
-        </table>
-      </div>
-    </div>
-
-    <div class="section-divider"></div>
-    <div class="report-section-title" id="pSecNarr">Statement Narrative</div>
-    <div class="report-grid" style="margin-bottom:14px;">
-      <div class="report-card full">
-        <div class="report-card-hdr" id="pNarrHdr">Statement Details</div>
-        <div class="report-text-box" id="rDetails"></div>
-      </div>
-      <div class="report-card full" id="translatedReportCard" style="display:none;">
-        <div class="report-card-hdr" id="pTranslatedHdr">Translated Statement</div>
-        <div class="report-text-box" id="rTranslatedDetails"></div>
-      </div>
-    </div>
-
-    <div class="section-divider"></div>
-    <div class="report-section-title" id="pSecSig">Acknowledgment &amp; Signature</div>
-    <div class="report-grid" style="margin-bottom:14px;">
-      <div class="affirmation-block"><p class="aff-en" id="rAffirmationText"></p></div>
-      <div class="sig-section report-card full">
-        <div class="report-card-hdr" id="pSigHdr">Signature</div>
-        <div class="sig-layout">
-          <div class="sig-left">
-            <div class="sig-label" id="pSigLabel">Signature</div>
-            <div class="sig-img-box" id="signaturePreview"></div>
-          </div>
-          <div class="sig-right">
-            <div class="sig-cell"><div class="sig-label" id="pSignedByLabel">Signed By</div><div class="sig-field" id="rSignedBy"></div></div>
-            <div class="sig-cell"><div class="sig-pill" id="rAffirmation"></div></div>
-            <div class="sig-cell"><div class="sig-label" id="pSignedAtLabel">Signed Date &amp; Time</div><div class="sig-field" id="rSignedAt"></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-divider"></div>
-    <div class="report-section-title" id="pSecPhotos">ID Document Photos</div>
-    <div class="report-grid" style="margin-bottom:16px;">
-      <div class="photos-section report-card full">
-        <div class="report-card-hdr" id="pPhotosHdr">ID Document Photos</div>
-        <div class="photos-grid">
-          <div class="photo-panel">
-            <div class="photo-panel-label" id="pFrontLabel">ID Front Page</div>
-            <div class="photo-img-box" id="rFrontPhoto"><div class="no-photo" id="rFrontNoPhoto">No photo provided</div></div>
-          </div>
-          <div class="photo-panel">
-            <div class="photo-panel-label" id="pBackLabel">ID Back Page</div>
-            <div class="photo-img-box" id="rBackPhoto"><div class="no-photo" id="rBackNoPhoto">No photo provided</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="print-footer">
-      <div class="print-footer-left" id="printFooterLeft">Generated from the digital statement form.</div>
-      <div class="print-footer-right"><span class="confidential-badge">CONFIDENTIAL</span></div>
-    </div>
-  </section>
+<header class="hdr"><div class="hdr-flex"><div class="hdr-brand"><div class="hdr-mark" aria-hidden="true">◆</div><div><div class="hdr-kicker">Security Department</div><h1>Investigation Written Statement</h1><p id="headerSub">Team Member</p></div></div><div class="hdr-side"><div class="confidential-chip">🔒 Confidential</div><small>For authorized use only</small></div></div></header>
+<div class="shell"><div class="content">
+<div class="type-tabs" role="tablist" aria-label="Statement type">
+<button class="type-tab active" id="teamMemberTab" type="button" role="tab" aria-selected="true">Team Member</button>
+<button class="type-tab" id="nonEmployeeTab" type="button" role="tab" aria-selected="false">None Team Member</button>
 </div>
-
-
-<div id="pdfPageRenderArea" style="position:fixed;left:-10000px;top:0;width:1200px;visibility:hidden;pointer-events:none;z-index:-1;"></div>
-
-<div id="pdfPage1Template" class="print-report pdf-page-template" style="display:none;background:#fff;color:#111827;width:794px;max-width:794px;margin:0 auto;padding:20px 20px;box-sizing:border-box;border:1px solid #d6e0ea;border-radius:14px;font-family:'Segoe UI',Arial,sans-serif;">
-  <div class="corp-header">
-    <div class="corp-logo-box"><div class="corp-logo-circle" id="pdf1CorpLogoInitials">SEC</div></div>
-    <div class="corp-title-block">
-      <div class="corp-dept" id="pdf1PrintDept">Security Department</div>
-      <div class="corp-title" id="pdf1PrintTitle">Investigation Written Statement</div>
-      <div class="corp-meta" id="pdf1PrintMeta"></div>
-    </div>
-    <div class="corp-stamp">
-      <div class="corp-stamp-badge" id="pdf1PrintStampBadge">CONFIDENTIAL</div>
-      <div class="corp-ref" id="pdf1PrintRef"></div>
-    </div>
-  </div>
-
-  <div class="report-section-title" id="pdf1SecInfo">Statement Information</div>
-  <div class="report-grid" style="margin-bottom:14px;">
-    <div class="report-card">
-      <div class="report-card-hdr" id="pdf1CardInfoHdr">Statement Details</div>
-      <table class="report-table">
-        <tr><th id="pdf1ThProperty">Property</th><td id="pdf1Property"></td></tr>
-        <tr><th id="pdf1ThDate">Date &amp; Time</th><td id="pdf1Date"></td></tr>
-        <tr><th id="pdf1ThSubject">Subject</th><td id="pdf1Subject"></td></tr>
-      </table>
-    </div>
-    <div class="report-card">
-      <div class="report-card-hdr" id="pdf1CardPersonHdr">Person Details</div>
-      <table class="report-table">
-        <tr><th id="pdf1ThName">Person Name</th><td id="pdf1EmployeeName"></td></tr>
-        <tr><th id="pdf1ThPhone">Phone Number</th><td id="pdf1Phone"></td></tr>
-        <tr><th id="pdf1ThCompany">Company</th><td id="pdf1CompanyName"></td></tr>
-        <tr><th id="pdf1ThDept">Host Dept.</th><td id="pdf1Department"></td></tr>
-        <tr><th id="pdf1ThLocation">Location</th><td id="pdf1Location"></td></tr>
-      </table>
-    </div>
-  </div>
-
-  <div class="section-divider"></div>
-  <div class="report-section-title" id="pdf1SecNarr">Statement Narrative</div>
-  <div class="report-grid" style="margin-bottom:14px;">
-    <div class="report-card full">
-      <div class="report-card-hdr" id="pdf1NarrHdr">Statement Details</div>
-      <div class="report-text-box" id="pdf1Details"></div>
-    </div>
-    <div class="report-card full" id="pdf1TranslatedReportCard" style="display:none;">
-      <div class="report-card-hdr" id="pdf1TranslatedHdr">Translated Statement</div>
-      <div class="report-text-box" id="pdf1TranslatedDetails"></div>
-    </div>
-  </div>
-
-  <div class="section-divider"></div>
-  <div class="report-section-title" id="pdf1SecSig">Acknowledgment &amp; Signature</div>
-  <div class="report-grid" style="margin-bottom:16px;">
-    <div class="affirmation-block"><p class="aff-en" id="pdf1AffirmationText"></p></div>
-    <div class="sig-section report-card full">
-      <div class="report-card-hdr" id="pdf1SigHdr">Signature</div>
-      <div class="sig-layout">
-        <div class="sig-left">
-          <div class="sig-label" id="pdf1SigLabel">Signature</div>
-          <div class="sig-img-box" id="pdf1SignaturePreview"></div>
-        </div>
-        <div class="sig-right">
-          <div class="sig-cell"><div class="sig-label" id="pdf1SignedByLabel">Signed By</div><div class="sig-field" id="pdf1SignedBy"></div></div>
-          <div class="sig-cell"><div class="sig-pill" id="pdf1Affirmation"></div></div>
-          <div class="sig-cell"><div class="sig-label" id="pdf1SignedAtLabel">Signed Date &amp; Time</div><div class="sig-field" id="pdf1SignedAt"></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div id="pdf1PhotosWrap" class="page1-photos-wrap" style="display:none;">
-    <div class="section-divider"></div>
-    <div class="report-section-title" id="pdf1SecPhotosInline">ID Document Photos</div>
-    <div class="report-grid" style="margin-bottom:16px;">
-      <div class="photos-section report-card full">
-        <div class="report-card-hdr" id="pdf1PhotosHdrInline">ID Document Photos</div>
-        <div class="photos-grid">
-          <div class="photo-panel">
-            <div class="photo-panel-label" id="pdf1FrontLabelInline">ID Front Page</div>
-            <div class="photo-img-box" id="pdf1FrontPhotoInline"><div class="no-photo" id="pdf1FrontNoPhotoInline">No photo provided</div></div>
-          </div>
-          <div class="photo-panel">
-            <div class="photo-panel-label" id="pdf1BackLabelInline">ID Back Page</div>
-            <div class="photo-img-box" id="pdf1BackPhotoInline"><div class="no-photo" id="pdf1BackNoPhotoInline">No photo provided</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="print-footer">
-    <div class="print-footer-left" id="pdf1FooterLeft">Generated from the digital statement form.</div>
-    <div class="print-footer-right"><span class="confidential-badge" id="pdf1FooterBadge">CONFIDENTIAL</span></div>
-  </div>
-</div>
-
-<div id="pdfPage2Template" class="print-report pdf-page-template" style="display:none;background:#fff;color:#111827;width:794px;max-width:794px;margin:0 auto;padding:20px 20px;box-sizing:border-box;border:1px solid #d6e0ea;border-radius:14px;font-family:'Segoe UI',Arial,sans-serif;">
-  <div class="corp-header">
-    <div class="corp-logo-box"><div class="corp-logo-circle" id="pdf2CorpLogoInitials">SEC</div></div>
-    <div class="corp-title-block">
-      <div class="corp-dept" id="pdf2PrintDept">Security Department</div>
-      <div class="corp-title" id="pdf2PrintTitle">Investigation Written Statement</div>
-      <div class="corp-meta" id="pdf2PrintMeta"></div>
-    </div>
-    <div class="corp-stamp">
-      <div class="corp-stamp-badge" id="pdf2PrintStampBadge">CONFIDENTIAL</div>
-      <div class="corp-ref" id="pdf2PrintRef"></div>
-    </div>
-  </div>
-
-  <div class="report-section-title" id="pdf2SecPhotos">ID Document Photos</div>
-  <div class="report-grid" style="margin-bottom:16px;">
-    <div class="photos-section report-card full">
-      <div class="report-card-hdr" id="pdf2PhotosHdr">ID Document Photos</div>
-      <div class="photos-grid">
-        <div class="photo-panel">
-          <div class="photo-panel-label" id="pdf2FrontLabel">ID Front Page</div>
-          <div class="photo-img-box" id="pdf2FrontPhoto"><div class="no-photo" id="pdf2FrontNoPhoto">No photo provided</div></div>
-        </div>
-        <div class="photo-panel">
-          <div class="photo-panel-label" id="pdf2BackLabel">ID Back Page</div>
-          <div class="photo-img-box" id="pdf2BackPhoto"><div class="no-photo" id="pdf2BackNoPhoto">No photo provided</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="print-footer">
-    <div class="print-footer-left" id="pdf2FooterLeft">Generated from the digital statement form.</div>
-    <div class="print-footer-right"><span class="confidential-badge" id="pdf2FooterBadge">CONFIDENTIAL</span></div>
-  </div>
-</div>
-
-<div class="progress-overlay" id="progressOverlay">
-  <div class="progress-card">
-    <div class="progress-title" id="progressTitle">Generating report...</div>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="progress-note" id="progressNote">Please wait</div>
-  </div>
-</div>
-
+<form id="statementForm" novalidate>
+<section id="nonEmployeeMode" class="form-mode" hidden>
+<div class="panel"><div class="panel-hdr">Person Information</div><div class="panel-body">
+<div class="form-subtitle">None Team Member</div>
+<table class="form-table info-table"><tbody>
+<tr><th><label class="req" for="neDateTime">Date &amp; Time Written</label></th><td><input id="neDateTime" type="datetime-local" readonly data-required="1"></td><th><label class="req" for="neName">Person Name</label></th><td><input id="neName" data-required="1"></td></tr>
+<tr><th><label class="req" for="nePhotoId">Photo ID Number</label></th><td><input id="nePhotoId" data-required="1"></td><th><label class="req" for="nePhone">Phone Number</label></th><td><input id="nePhone" type="tel" placeholder="+971 50 000 0000" data-required="1"></td></tr>
+<tr><th><label class="req" for="neCompany">Company Name</label></th><td><input id="neCompany" data-required="1"></td><th><label class="req" for="neDepartment">Host Department</label></th><td><input id="neDepartment" data-required="1" autocomplete="off" placeholder="Enter host department"></td></tr>
+<tr><th><label for="neLocation">Incident Location</label></th><td colspan="3"><input id="neLocation" placeholder="e.g., Lobby, Pool area"></td></tr>
+<tr><th><label class="req" for="neSubject">Select Subject</label></th><td colspan="3"><div class="inline-subject"><select id="neSubject" data-required="1"></select><input id="neCustomSubject" placeholder="Enter custom subject" hidden></div></td></tr>
+</tbody></table></div></div>
+<div class="panel"><div class="panel-hdr">ID Document Photos</div><div class="panel-body"><table class="form-table"><tbody>
+<tr><th><label for="frontPhotoInput">ID Front Page <span style="font-weight:600;color:var(--text3)">(Optional)</span></label></th><td><div class="photo-upload-box"><input type="file" id="frontPhotoInput" accept="image/*" capture="environment"><span class="photo-icon" id="frontIcon">🪪</span><span class="photo-label-text" id="frontHint">Tap to upload ID front page</span><img id="frontPreview" class="photo-preview" alt="ID Front"></div><input type="hidden" id="frontData"></td></tr>
+<tr><th><label for="backPhotoInput">ID Back Page <span style="font-weight:600;color:var(--text3)">(Optional)</span></label></th><td><div class="photo-upload-box"><input type="file" id="backPhotoInput" accept="image/*" capture="environment"><span class="photo-icon" id="backIcon">🔄</span><span class="photo-label-text" id="backHint">Tap to upload ID back page</span><img id="backPreview" class="photo-preview" alt="ID Back"></div><input type="hidden" id="backData"></td></tr>
+</tbody></table></div></div>
+<div class="panel"><div class="panel-hdr">Statement Narrative</div><div class="panel-body"><div class="char-row"><label class="req" for="neDetails">Full Details</label><span id="neCount" style="font-size:.72rem;color:var(--text3)">0 characters</span></div><textarea id="neDetails" data-required="1" placeholder="Describe the incident with full detail, timeline, persons involved, actions taken..."></textarea></div></div>
+<div class="panel"><div class="panel-hdr">Acknowledgment &amp; Signature</div><div class="panel-body"><div class="affirm"><input type="checkbox" id="neAffirm"><div>I affirm that this statement was made voluntarily, without threat or coercion, and all information provided is truthful and correct to the best of my knowledge.</div></div><table class="form-table" style="margin-top:16px"><tbody>
+<tr><th><label class="req">Signature (draw below)</label></th><td><div class="sig-box"><canvas id="neCanvas"></canvas></div><div class="front-sign-actions"><button class="btn-sm" type="button" data-sig-clear="ne">Clear</button><button class="btn-sm" type="button" data-sig-undo="ne">Undo</button></div></td></tr>
+<tr><th><label class="req" for="neSigName">Signed By (Print Name)</label></th><td><input id="neSigName" readonly></td></tr>
+<tr><th><label>&nbsp;</label></th><td><div class="sig-badge" id="neSigBadge">Not signed</div></td></tr>
+<tr><th><label for="neSigAt">Signed Date &amp; Time</label></th><td><input id="neSigAt" readonly></td></tr>
+</tbody></table></div></div>
+</section>
+<section id="teamMemberMode" class="form-mode">
+<div class="panel"><div class="panel-hdr">Team Member Information</div><div class="panel-body">
+<div class="form-subtitle">Team Member</div>
+<table class="form-table info-table"><tbody>
+<tr><th><label class="req" for="tmDateTime">Date &amp; Time Written</label></th><td><input id="tmDateTime" type="datetime-local" readonly data-required="1"></td><th><label class="req" for="tmName">Team Member Name</label></th><td><input id="tmName" data-required="1"></td></tr>
+<tr><th><label class="req" for="tmId">ID Number</label></th><td><input id="tmId" data-required="1"></td><th><label class="req" for="tmDepartment">Department</label></th><td><input id="tmDepartment" data-required="1" autocomplete="off" placeholder="Enter department"></td></tr>
+<tr><th><label class="req" for="tmDesignation">Designation</label></th><td><input id="tmDesignation" data-required="1"></td><th><label class="req" for="tmLocation">Incident Location</label></th><td><input id="tmLocation" data-required="1"></td></tr>
+<tr><th><label class="req" for="tmSubject">Select Subject</label></th><td colspan="3"><div class="inline-subject"><select id="tmSubject" data-required="1"></select><input id="tmCustomSubject" placeholder="Enter custom subject" hidden></div></td></tr>
+</tbody></table></div></div>
+<div class="panel"><div class="panel-hdr">Statement Details</div><div class="panel-body"><div class="char-row"><label class="req" for="tmDetails">Statement Details</label><span id="tmCount" style="font-size:.72rem;color:var(--text3)">0 characters</span></div><textarea id="tmDetails" data-required="1" placeholder="Enter the full written statement..."></textarea></div></div>
+<div class="panel"><div class="panel-hdr">Acknowledgment &amp; Signature</div><div class="panel-body"><div class="affirm"><input type="checkbox" id="tmAffirm"><div>I affirm that this statement was made voluntarily, without threat or coercion, and all information provided is truthful and correct to the best of my knowledge.</div></div><table class="form-table" style="margin-top:16px"><tbody>
+<tr><th><label class="req">Signature (draw below)</label></th><td><div class="sig-box"><canvas id="tmCanvas"></canvas></div><div class="front-sign-actions"><button class="btn-sm" type="button" data-sig-clear="tm">Clear</button><button class="btn-sm" type="button" data-sig-undo="tm">Undo</button></div></td></tr>
+<tr><th><label class="req" for="tmSigName">Signed By (Print Name)</label></th><td><input id="tmSigName" readonly></td></tr>
+<tr><th><label>&nbsp;</label></th><td><div class="sig-badge" id="tmSigBadge">Not signed</div></td></tr>
+<tr><th><label for="tmSigAt">Signed Date &amp; Time</label></th><td><input id="tmSigAt" readonly></td></tr>
+</tbody></table></div></div>
+</section>
+<div class="footer"><div class="status" id="statusMsg">Ready</div><div class="foot-actions"><button class="btn-gold" type="button" id="pdfBtn">Generate PDF Report</button><button class="btn-sm" type="button" id="resetBtn">Reset Form</button></div></div>
+</form></div></div></div>
+<div class="progress-overlay" id="progressOverlay"><div class="progress-card"><div class="progress-title">Generating PDF report</div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-note">Preparing layout and exporting PDF...</div></div></div>
 <script>
-(function(){
-function safeSet(id,value){var el=document.getElementById(id); if(el) el.textContent=value;}
-const T = {
-  en:{
-    dir:'ltr',hdrDept:'Security Department',hdrTitle:'Investigation Written Statement',hdrSub:'Professional written statement form — contractor / visitor',
-    panelInfo:'Statement Information',panelPerson:'Person Information',panelPhoto:'ID Document Photos',panelNarr:'Statement Narrative',panelAck:'Acknowledgment & Signature',
-    lblProperty:'Property Name',lblDateTime:'Date & Time Written',lblSubject:'Subject',lblCustomSubject:'Custom Subject',
-    lblPersonName:'Person Name',lblPhone:'Phone Number',lblCompany:'Company Name',lblDept:'Host Department',lblLocation:'Incident Location',
-    lblFrontPhoto:'ID Front Page',lblBackPhoto:'ID Back Page',lblDetails:'Full Details (what, when, who, actions)',
-    lblSignature:'Signature (draw below)',lblSignedBy:'Signed By (Print Name)',lblSignedAt:'Signed Date & Time',lblTranslated:'Translated Statement',
-    frontHint:'Tap to upload ID front page',backHint:'Tap to upload ID back page',
-    affirmation:'I affirm that this statement was made voluntarily, without threat or coercion, and all information provided is truthful and correct to the best of my knowledge.',
-    btnType:'Type',btnSelect:'Select',btnClear:'Clear',btnUndo:'Undo',btnPrint:'Generate PDF Report',btnReset:'Reset Form',
-    btnTranslate:'Translate Statement',btnClearTrans:'Clear Translation',translateTitle:'Translation',
-    btnDark:'Dark Theme',btnLight:'Light Theme',
-    subjects:['Select Subject','Theft','Guest Complaint','Employee Misconduct','Lost & Found','Access Violation','Safety Incident','Damage to Property','Other'],
-    departments:['Select Host Department','Security','Front Office','Housekeeping','Food & Beverage','Engineering','HR','Other'],
-    charSuffix:'characters',canvasHint:'Sign here',sigNotSigned:'Not signed',sigSigned:'Signed',sigRecorded:'Signature recorded',
-    statusReady:'Ready',statusNeedAck:'Please check the acknowledgment checkbox.',statusNeedSig:'Signature required before printing.',
-    statusNeedFields:'Fill all required fields.',statusNeedFrontPhoto:'ID front page photo is required.',statusPreparing:'Preparing report...',
-    statusTranslated:'Translated successfully.',statusTranslateError:'Translation unavailable.',statusReset:'Form reset.',statusPDFOk:'PDF generated successfully.',
-    progressTitle:'Generating PDF report',progressNote:'Preparing layout and exporting PDF...',
-    pSecInfo:'Statement Information',pSecNarr:'Statement Narrative',pSecSig:'Acknowledgment & Signature',pSecPhotos:'ID Document Photos',
-    pCardInfo:'Statement Details',pCardPerson:'Person Details',pNarrHdr:'Statement Details',pTranslatedHdr:'Translated Statement',pSigHdr:'Signature',pPhotosHdr:'ID Document Photos',
-    pThProperty:'Property',pThDate:'Date & Time',pThSubject:'Subject',pThName:'Person Name',pThPhone:'Phone Number',pThCompany:'Company',pThDept:'Host Dept.',pThLocation:'Location',
-    pSigLabel:'Signature',pSignedByLabel:'Signed By',pSignedAtLabel:'Signed Date & Time',
-    pFrontLabel:'ID Front Page',pBackLabel:'ID Back Page',noPhoto:'No photo provided',
-    ackYes:'Confirmed — statement given voluntarily',ackNo:'Not confirmed',notProvided:'Not provided',
-    footerLeft:'Generated from the digital statement form.',confidential:'CONFIDENTIAL',
-    deptOptional:'(Optional)'
-  },
-  ar:{
-    dir:'rtl',hdrDept:'قسم الأمن',hdrTitle:'إفادة تحقيق خطية',hdrSub:'نموذج إفادة احترافي للمقاولين والزوار',
-    panelInfo:'معلومات الإفادة',panelPerson:'بيانات الشخص',panelPhoto:'صور وثيقة الهوية',panelNarr:'تفاصيل الإفادة',panelAck:'الإقرار والتوقيع',
-    lblProperty:'اسم المنشأة',lblDateTime:'تاريخ ووقت التحرير',lblSubject:'الموضوع',lblCustomSubject:'موضوع مخصص',
-    lblPersonName:'اسم الشخص',lblPhone:'رقم الهاتف',lblCompany:'اسم الشركة',lblDept:'القسم المستضيف',lblLocation:'موقع الحادث',
-    lblFrontPhoto:'وجه الهوية',lblBackPhoto:'ظهر الهوية',lblDetails:'التفاصيل الكاملة (ماذا، متى، من، الإجراءات)',
-    lblSignature:'التوقيع (يرجى التوقيع أدناه)',lblSignedBy:'الاسم المطبوع',lblSignedAt:'تاريخ ووقت التوقيع',lblTranslated:'الإفادة المترجمة',
-    frontHint:'اضغط لرفع صورة وجه الهوية',backHint:'اضغط لرفع صورة ظهر الهوية',
-    affirmation:'أقر بأن هذه الإفادة كُتبت بمحض إرادتي دون تهديد أو إكراه، وأن جميع المعلومات الواردة صحيحة حسب أفضل ما لدي من معرفة.',
-    btnType:'كتابة',btnSelect:'اختيار',btnClear:'مسح',btnUndo:'تراجع',btnPrint:'إنشاء تقرير PDF',btnReset:'إعادة تعيين',
-    btnTranslate:'ترجمة الإفادة',btnClearTrans:'مسح الترجمة',translateTitle:'الترجمة',
-    btnDark:'الوضع الداكن',btnLight:'الوضع الفاتح',
-    subjects:['اختر الموضوع','سرقة','شكوى نزيل','سوء سلوك موظف','مفقودات ومعثورات','مخالفة دخول','حادث سلامة','أضرار بالممتلكات','أخرى'],
-    departments:['اختر القسم المستضيف','الأمن','الاستقبال','التدبير المنزلي','الأغذية والمشروبات','الهندسة','الموارد البشرية','أخرى'],
-    charSuffix:'حرف',canvasHint:'',sigNotSigned:'غير موقّع',sigSigned:'موقّع',sigRecorded:'تم حفظ التوقيع',
-    statusReady:'جاهز',statusNeedAck:'يرجى تحديد خانة الإقرار.',statusNeedSig:'التوقيع مطلوب قبل الطباعة.',
-    statusNeedFields:'يرجى تعبئة جميع الحقول المطلوبة.',statusNeedFrontPhoto:'صورة وجه الهوية مطلوبة.',statusPreparing:'جارٍ تجهيز التقرير...',
-    statusTranslated:'تمت الترجمة بنجاح.',statusTranslateError:'خدمة الترجمة غير متاحة.',statusReset:'تمت إعادة تعيين النموذج.',statusPDFOk:'تم إنشاء ملف PDF بنجاح.',
-    progressTitle:'جارٍ إنشاء تقرير PDF',progressNote:'يتم تجهيز التقرير وتصدير ملف PDF...',
-    pSecInfo:'معلومات الإفادة',pSecNarr:'تفاصيل الإفادة',pSecSig:'الإقرار والتوقيع',pSecPhotos:'صور وثيقة الهوية',
-    pCardInfo:'تفاصيل الإفادة',pCardPerson:'بيانات الشخص',pNarrHdr:'تفاصيل الإفادة',pTranslatedHdr:'الإفادة المترجمة',pSigHdr:'التوقيع',pPhotosHdr:'وثائق الهوية',
-    pThProperty:'المنشأة',pThDate:'التاريخ والوقت',pThSubject:'الموضوع',pThName:'اسم الشخص',pThPhone:'رقم الهاتف',pThCompany:'الشركة',pThDept:'القسم المستضيف',pThLocation:'الموقع',
-    pSigLabel:'التوقيع',pSignedByLabel:'الاسم المطبوع',pSignedAtLabel:'تاريخ ووقت التوقيع',
-    pFrontLabel:'وجه الهوية',pBackLabel:'ظهر الهوية',noPhoto:'لم يتم تقديم صورة',
-    ackYes:'تم الإقرار — الإفادة طوعية',ackNo:'لم يتم الإقرار',notProvided:'غير متوفر',
-    footerLeft:'تم إنشاء هذا التقرير من النموذج الرقمي.',confidential:'سري',
-    deptOptional:'(اختياري)'
+(()=>{'use strict';const $=id=>document.getElementById(id);let mode='teamMember';
+const subjects=['','Theft','Guest Complaint','Employee Misconduct','Lost & Found','Access Violation','Safety Incident','Damage to Property','Policy Violation','Key Lost','Key Damaged','Aggressive Behaviour','Physical Assault','Sexual Harassment','Verbal Harassment','Missing Item','Other'];
+const subjectLabels=['Select Subject','Theft','Guest Complaint','Employee Misconduct','Lost & Found','Access Violation','Safety Incident','Damage to Property','Policy Violation','Key Lost','Key Damaged','Aggressive Behaviour','Physical Assault','Sexual Harassment','Verbal Harassment','Missing Item','Other'];
+function fillSelect(el,labels,values){el.innerHTML=labels.map((v,i)=>`<option value="${values[i]}">${v}</option>`).join('')}
+fillSelect($('neSubject'),subjectLabels,subjects);fillSelect($('tmSubject'),subjectLabels,subjects);
+const pad=n=>String(n).padStart(2,'0');function nowLocal(){const n=new Date();return `${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}T${pad(n.getHours())}:${pad(n.getMinutes())}`};$('neDateTime').value=nowLocal();$('tmDateTime').value=nowLocal();
+function formatDate(v){const d=v?new Date(v):new Date();return d.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).replace(',','')+' hrs'}
+function setStatus(s,error=false){$('statusMsg').textContent=s;$('statusMsg').style.color=error?'var(--red)':'var(--accent)'}
+function switchMode(next){mode=next;const ne=next==='nonEmployee';$('nonEmployeeMode').hidden=!ne;$('teamMemberMode').hidden=ne;$('nonEmployeeTab').classList.toggle('active',ne);$('teamMemberTab').classList.toggle('active',!ne);$('nonEmployeeTab').setAttribute('aria-selected',String(ne));$('teamMemberTab').setAttribute('aria-selected',String(!ne));$('headerSub').textContent=ne?'None Team Member':'Team Member';setStatus('Ready');setTimeout(()=>{sig[ne?'ne':'tm'].resize()},0)}
+$('nonEmployeeTab').onclick=()=>switchMode('nonEmployee');$('teamMemberTab').onclick=()=>switchMode('teamMember');
+$('neSubject').onchange=()=>{const custom=$('neSubject').value==='Other';$('neCustomSubject').hidden=!custom;if(!custom)$('neCustomSubject').value=''};
+$('tmSubject').onchange=()=>{const custom=$('tmSubject').value==='Other';$('tmCustomSubject').hidden=!custom;if(!custom)$('tmCustomSubject').value=''};
+function compressImageFile(file,maxW=850,maxH=850,quality=.58){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onerror=reject;reader.onload=e=>{const img=new Image();img.onerror=reject;img.onload=()=>{let w=img.naturalWidth||img.width,h=img.naturalHeight||img.height;const r=Math.min(1,maxW/w,maxH/h);w=Math.max(1,Math.round(w*r));h=Math.max(1,Math.round(h*r));const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d',{alpha:false});x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(img,0,0,w,h);resolve(c.toDataURL('image/jpeg',quality))};img.src=e.target.result};reader.readAsDataURL(file)})}
+function setupPhoto(inputId,previewId,dataId,hintId,iconId){$(inputId).addEventListener('change',async function(){const f=this.files&&this.files[0];if(!f)return;try{const data=await compressImageFile(f);$(dataId).value=data;$(previewId).src=data;$(previewId).style.display='block';$(hintId).style.display='none';$(iconId).style.display='none'}catch(e){console.error(e);alert('Unable to process this image. Please select another image.') }})}setupPhoto('frontPhotoInput','frontPreview','frontData','frontHint','frontIcon');setupPhoto('backPhotoInput','backPreview','backData','backHint','backIcon');
+function setupSignature(prefix,canvasId){const canvas=$(canvasId),ctx=canvas.getContext('2d');let strokes=[],drawing=false,current=[];function resize(){const rect=canvas.parentElement.getBoundingClientRect();canvas.width=Math.max(300,Math.floor(rect.width-16));canvas.height=170;draw()}function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.strokeStyle='#0057e7';ctx.lineWidth=2.2;ctx.lineCap='round';ctx.lineJoin='round';for(const s of strokes){if(!s.length)continue;ctx.beginPath();ctx.moveTo(s[0].x,s[0].y);for(const p of s.slice(1))ctx.lineTo(p.x,p.y);ctx.stroke()}if(strokes.length){$(prefix+'SigBadge').textContent='Signed';$(prefix+'SigAt').value=formatDate(new Date().toISOString())}else{$(prefix+'SigBadge').textContent='Not signed';$(prefix+'SigAt').value=''}}function point(e){const r=canvas.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:(t.clientX-r.left)*(canvas.width/r.width),y:(t.clientY-r.top)*(canvas.height/r.height)}}function start(e){e.preventDefault();drawing=true;current=[point(e)];strokes.push(current);draw()}function move(e){if(!drawing)return;e.preventDefault();current.push(point(e));draw()}function end(e){if(!drawing)return;e&&e.preventDefault();drawing=false;draw()}canvas.addEventListener('pointerdown',start);canvas.addEventListener('pointermove',move);window.addEventListener('pointerup',end);return{resize,clear(){strokes=[];draw()},undo(){strokes.pop();draw()},has(){return strokes.length>0},data(){return strokes.length?canvas.toDataURL('image/png'):''}}}
+const sig={ne:setupSignature('ne','neCanvas'),tm:setupSignature('tm','tmCanvas')};window.addEventListener('resize',()=>{sig.ne.resize();sig.tm.resize()});document.querySelectorAll('[data-sig-clear]').forEach(b=>b.onclick=()=>sig[b.dataset.sigClear].clear());document.querySelectorAll('[data-sig-undo]').forEach(b=>b.onclick=()=>sig[b.dataset.sigUndo].undo());
+function bindName(src,dst){$(src).addEventListener('input',()=>$(dst).value=$(src).value)}bindName('neName','neSigName');bindName('tmName','tmSigName');
+$('neDetails').oninput=()=>$('neCount').textContent=$('neDetails').value.length+' characters';$('tmDetails').oninput=()=>$('tmCount').textContent=$('tmDetails').value.length+' characters';
+function selectedSubject(prefix){const s=$(prefix+'Subject').value;return s==='Other'?($(prefix+'CustomSubject').value.trim()||'Other'):s}
+function neDepartment(){return $('neDepartment').value.trim()}
+function tmDepartment(){return $('tmDepartment').value.trim()}
+function validate(){const root=mode==='nonEmployee'?$('nonEmployeeMode'):$('teamMemberMode');for(const el of root.querySelectorAll('[data-required="1"]')){if(el.hidden||el.closest('[hidden]'))continue;if(!String(el.value||'').trim()){setStatus('Fill all required fields.',true);alert('Fill all required fields.');el.focus();return false}}if(mode==='nonEmployee'&&$('neSubject').value==='Other'&&!$('neCustomSubject').value.trim()){alert('Enter the custom subject.');$('neCustomSubject').focus();return false}if(mode==='teamMember'&&$('tmSubject').value==='Other'&&!$('tmCustomSubject').value.trim()){alert('Enter the custom subject.');$('tmCustomSubject').focus();return false}const aff=mode==='nonEmployee'?$('neAffirm'):$('tmAffirm');if(!aff.checked){setStatus('Please check the acknowledgment checkbox.',true);alert('Please check the acknowledgment checkbox.');return false}const sg=mode==='nonEmployee'?sig.ne:sig.tm;if(!sg.has()){setStatus('Signature required before printing.',true);alert('Signature required before printing.');return false}return true}
+function esc(v){return String(v??'')}
+function pdfSafe(v){return String(v??'').trim()||'Not provided'}
+function addPdfHeader(pdf,subTitle){
+ const W=210;
+ // Premium header band
+ pdf.setFillColor(13,41,71);pdf.roundedRect(12,9,186,23,3,3,'F');
+ pdf.setFillColor(199,164,74);pdf.rect(12,30.4,186,1.6,'F');
+ // Shield/mark
+ pdf.setFillColor(199,164,74);pdf.roundedRect(17,13,14,14,3,3,'F');
+ pdf.setTextColor(13,41,71);pdf.setFont('helvetica','bold');pdf.setFontSize(8.5);pdf.text('SEC',24,21.6,{align:'center'});
+ // Department - intentionally larger per request
+ pdf.setTextColor(242,246,250);pdf.setFont('helvetica','bold');pdf.setFontSize(11.5);pdf.text('SECURITY DEPARTMENT',36,16.2);
+ pdf.setTextColor(255,255,255);pdf.setFontSize(17.5);pdf.text('Investigation Written Statement',36,23.1);
+ pdf.setTextColor(225,234,242);pdf.setFont('helvetica','normal');pdf.setFontSize(9.5);pdf.text(subTitle,36,28.2);
+ // Confidential chip
+ pdf.setFillColor(24,58,88);pdf.setDrawColor(199,164,74);pdf.roundedRect(160,13,32,8,2,2,'FD');
+ pdf.setTextColor(236,204,114);pdf.setFont('helvetica','bold');pdf.setFontSize(7.5);pdf.text('CONFIDENTIAL',176,18.1,{align:'center'});
+ return 37
+}
+function ensurePage(pdf,y,needed,subTitle){if(y+needed<=282)return y;pdf.addPage();return addPdfHeader(pdf,subTitle)}
+function sectionTitle(pdf,y,title,subTitle){
+ y=ensurePage(pdf,y,10,subTitle);
+ pdf.setFillColor(21,58,96);pdf.setDrawColor(21,58,96);pdf.roundedRect(12,y,186,9,2,2,'FD');
+ pdf.setFillColor(199,164,74);pdf.rect(12,y,2.2,9,'F');
+ pdf.setTextColor(255,255,255);pdf.setFont('helvetica','bold');pdf.setFontSize(9);pdf.text(title.toUpperCase(),17,y+6);
+ return y+12
+}
+function infoGrid(pdf,y,rows,subTitle){
+ const x=12,W=186,labelW=27,valueW=66,rowH=14;
+ for(const row of rows){
+  y=ensurePage(pdf,y,rowH+1,subTitle);
+  const full=[row[0]??'',row[1]??'',row[2]??'',row[3]??''];
+  const xs=[x,x+labelW,x+labelW+valueW,x+labelW+valueW+labelW];
+  const ws=[labelW,valueW,labelW,valueW];
+  for(let i=0;i<4;i++){
+   const isLabel=(i===0||i===2);
+   pdf.setDrawColor(207,218,228);
+   pdf.setFillColor(isLabel?241:255,isLabel?245:255,isLabel?248:255);
+   pdf.rect(xs[i],y,ws[i],rowH,'FD');
+   if(!full[i]) continue;
+   if(isLabel){
+    pdf.setTextColor(49,70,91);pdf.setFont('helvetica','bold');pdf.setFontSize(9.5);
+    const lt=pdf.splitTextToSize(String(full[i]),ws[i]-4);
+    pdf.text(lt.slice(0,2),xs[i]+2,y+5.1);
+   }else{
+    pdf.setTextColor(30,41,59);pdf.setFont('helvetica','normal');pdf.setFontSize(11);
+    const vt=pdf.splitTextToSize(pdfSafe(full[i]),ws[i]-4);
+    pdf.text(vt.slice(0,2),xs[i]+2,y+5.4);
+   }
   }
-};
-const subjectVals=['','Theft','Guest Complaint','Employee Misconduct','Lost & Found','Access Violation','Safety Incident','Damage to Property','Other'];
-const deptVals=['','Security','Front Office','Housekeeping','Food & Beverage','Engineering','HR','Other'];
-
-let lang='en', isDark=false;
-let strokes=[], drawing=false, hasSig=false, currentStroke=[];
-
-const $=id=>document.getElementById(id);
-const pad=n=>String(n).padStart(2,'0');
-
-function setDateTime(){
-  const n=new Date();
-  $('statementDateTime').value=`${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}T${pad(n.getHours())}:${pad(n.getMinutes())}`;
+  y+=rowH;
+ }
+ return y+3
 }
-
-// Lock datetime — update only when user interacts with form for first time
-let dtLocked=false;
-function lockDateTime(){
-  if(!dtLocked){setDateTime();dtLocked=true;}
-}
-document.getElementById('sf').addEventListener('input',lockDateTime,{once:true});
-document.getElementById('sf').addEventListener('change',lockDateTime,{once:true});
-setDateTime();
-
-// Photo upload
-function setupPhoto(inputId,previewId,dataId,boxId,hintId,iconId){
-  const input=$(inputId),preview=$(previewId),dataEl=$(dataId),box=$(boxId),hint=$(hintId);
-  input.addEventListener('change',function(){
-    const file=this.files&&this.files[0];
-    if(!file)return;
-    const reader=new FileReader();
-    reader.onload=e=>{
-      dataEl.value=e.target.result;
-      preview.src=e.target.result;
-      preview.style.display='block';
-      if(iconId&&$(iconId))$(iconId).style.display='none';
-      hint.style.display='none';
-    };
-    reader.readAsDataURL(file);
-  });
-}
-setupPhoto('frontPhotoInput','frontPhotoPreview','frontPhotoData','frontBox','frontPhotoHint','');
-setupPhoto('backPhotoInput','backPhotoPreview','backPhotoData','backBox','backPhotoHint','backPhotoIcon');
-
-// Fill selects
-function fillSelect(el,labels,vals,cur=''){
-  el.innerHTML=labels.map((l,i)=>`<option value="${vals[i]||''}">${l}</option>`).join('');
-  el.value=cur;
-}
-
-function setStatus(msg,type='ok'){
-  const s=$('statusMsg');s.textContent=msg;
-  s.style.color=type==='error'?'var(--red)':type==='muted'?'var(--text3)':'var(--accent)';
-}
-
-function updateCharCount(){
-  const t=T[lang];
-  $('charCount').textContent=`${$('statementDetails').value.length} ${t.charSuffix}`;
-}
-
-function isArabic(v){return /[؀-ۿ]/.test(String(v||''));}
-function setDir(el,val){
-  if(!el)return;
-  const v=String(val??el.value??el.textContent??'').trim();
-  el.style.direction=isArabic(v)?'rtl':'ltr';
-  el.style.textAlign=isArabic(v)?'right':'left';
-}
-
-function applyLang(l){
-  if(!T[l]) l='en';
-  lang=l;
-  const t=T[l];
-  document.documentElement.lang=l;
-  document.body.classList.remove('form-lang-en','form-lang-ar');
-  document.body.classList.add(`form-lang-${l}`);
-  document.body.dir = (l==='ar') ? 'rtl' : 'ltr';
-
-  // Header
-  $('hdrDept').textContent=t.hdrDept;
-  $('hdrTitle').textContent=t.hdrTitle;
-  $('hdrSub').textContent=t.hdrSub;
-
-  // Panel headers
-  $('panelInfoLbl').textContent=t.panelInfo;
-  $('panelPersonLbl').textContent=t.panelPerson;
-  $('panelPhotoLbl').textContent=t.panelPhoto;
-  $('panelNarrLbl').textContent=t.panelNarr;
-  $('panelAckLbl').textContent=t.panelAck;
-
-  // Labels
-  $('lblProperty').textContent=t.lblProperty+'  '; $('lblProperty').className='req';
-  $('lblDateTime').textContent=t.lblDateTime+'  '; $('lblDateTime').className='req';
-  $('lblSubject').textContent=t.lblSubject+'  '; $('lblSubject').className='req';
-  $('lblCustomSubject').textContent=t.lblCustomSubject;
-  $('lblPersonName').textContent=t.lblPersonName+'  '; $('lblPersonName').className='req';
-  $('lblPhone').textContent=t.lblPhone+'  '; $('lblPhone').className='req';
-  $('lblCompany').textContent=t.lblCompany+'  '; $('lblCompany').className='req';
-  $('lblDept').textContent=t.lblDept+'  '; $('lblDept').className='req';
-  $('lblDept2').textContent=t.lblDept;
-  $('lblLocation').textContent=t.lblLocation;
-  $('lblFrontPhoto').innerHTML=`<span style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--text2);">${t.lblFrontPhoto}</span> <span style="color:var(--red)">*</span>`;
-  $('lblBackPhoto').innerHTML=`<span style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--text2);">${t.lblBackPhoto}</span> <span style="font-size:.65rem;color:var(--text3);font-weight:600;">${t.deptOptional}</span>`;
-  $('frontPhotoHint').textContent=t.frontHint;
-  $('backPhotoHint').textContent=t.backHint;
-  $('lblDetails').textContent=t.lblDetails+' '; document.querySelector('#panelNarrLbl+div label.req,#panelNarrLbl~div .f label.req')||null;
-  $('translatePanelTitle').textContent=t.translateTitle;
-  $('lblTranslated').textContent=t.lblTranslated;
-  $('translateStatementBtn').textContent=t.btnTranslate;
-  $('clearTranslateBtn').textContent=t.btnClearTrans;
-  $('lblSignature').textContent=t.lblSignature+' '; $('lblSignature').className='req';
-  $('lblSignedBy').textContent=t.lblSignedBy+' '; $('lblSignedBy').className='req';
-  $('lblSignedAt').textContent=t.lblSignedAt;
-  $('affirmText').textContent=t.affirmation;
-  $('clearSig').textContent=t.btnClear;
-  $('undoSig').textContent=t.btnUndo;
-  $('printBtn').textContent=t.btnPrint;
-  $('resetBtn').textContent=t.btnReset;
-  $('themeBtn').textContent=isDark?t.btnLight:t.btnDark;
-  $('progressTitle').textContent=t.progressTitle;
-  $('progressNote').textContent=t.progressNote;
-
-  const curSubj=$('subject').value, curDept=$('deptSelect').value;
-  fillSelect($('subject'),t.subjects,subjectVals,curSubj);
-  fillSelect($('deptSelect'),t.departments,deptVals,curDept);
-
-  if(!$('sigData').value) $('sigBadge').textContent=t.sigNotSigned;
-
-  // On-screen print report labels
-  $('printDept').textContent=t.hdrDept;
-  $('printTitle').textContent=t.hdrTitle;
-  $('pSecInfo').textContent=t.pSecInfo;
-  $('pCardInfoHdr').textContent=t.pCardInfo;
-  $('pCardPersonHdr').textContent=t.pCardPerson;
-  $('pThProperty').textContent=t.pThProperty;
-  $('pThDate').textContent=t.pThDate;
-  $('pThSubject').textContent=t.pThSubject;
-  $('pThName').textContent=t.pThName;
-  $('pThPhone').textContent=t.pThPhone;
-  $('pThCompany').textContent=t.pThCompany;
-  $('pThDept').textContent=t.pThDept;
-  $('pThLocation').textContent=t.pThLocation;
-  $('pSecNarr').textContent=t.pSecNarr;
-  $('pNarrHdr').textContent=t.pNarrHdr;
-  $('pTranslatedHdr').textContent=t.pTranslatedHdr;
-  $('pSecSig').textContent=t.pSecSig;
-  $('pSigHdr').textContent=t.pSigHdr;
-  $('pSigLabel').textContent=t.pSigLabel;
-  $('pSignedByLabel').textContent=t.pSignedByLabel;
-  $('pSignedAtLabel').textContent=t.pSignedAtLabel;
-  $('pSecPhotos').textContent=t.pSecPhotos;
-  safeSet('pPhotosHdr', 'ID Document Photos');
-  $('pFrontLabel').textContent=t.pFrontLabel;
-  $('pBackLabel').textContent=t.pBackLabel;
-  safeSet('rAffirmationText', t.affirmation);
-  $('rAffirmationText').className=lang==='ar'?'aff-ar':(lang==='ur'?'aff-ur':'aff-en');
-  $('rFrontNoPhoto').textContent=t.noPhoto;
-  $('rBackNoPhoto').textContent=t.noPhoto;
-  $('printFooterLeft').textContent=t.footerLeft;
-
-  // PDF page templates labels
-  $('pdf1PrintDept').textContent=t.hdrDept;
-  $('pdf1PrintTitle').textContent=t.hdrTitle;
-  $('pdf1SecInfo').textContent=t.pSecInfo;
-  $('pdf1CardInfoHdr').textContent=t.pCardInfo;
-  $('pdf1CardPersonHdr').textContent=t.pCardPerson;
-  $('pdf1ThProperty').textContent=t.pThProperty;
-  $('pdf1ThDate').textContent=t.pThDate;
-  $('pdf1ThSubject').textContent=t.pThSubject;
-  $('pdf1ThName').textContent=t.pThName;
-  $('pdf1ThPhone').textContent=t.pThPhone;
-  $('pdf1ThCompany').textContent=t.pThCompany;
-  $('pdf1ThDept').textContent=t.pThDept;
-  $('pdf1ThLocation').textContent=t.pThLocation;
-  $('pdf1SecNarr').textContent=t.pSecNarr;
-  $('pdf1NarrHdr').textContent=t.pNarrHdr;
-  $('pdf1TranslatedHdr').textContent=t.pTranslatedHdr;
-  $('pdf1SecSig').textContent=t.pSecSig;
-  $('pdf1SigHdr').textContent=t.pSigHdr;
-  $('pdf1SigLabel').textContent=t.pSigLabel;
-  $('pdf1SignedByLabel').textContent=t.pSignedByLabel;
-  $('pdf1SignedAtLabel').textContent=t.pSignedAtLabel;
-  safeSet('pdf1AffirmationText', t.affirmation);
-  $('pdf1AffirmationText').className=lang==='ar'?'aff-ar':(lang==='ur'?'aff-ur':'aff-en');
-  $('pdf1FooterLeft').textContent=t.footerLeft;
-  $('pdf1FooterBadge').textContent=t.confidential;
-
-  $('pdf2PrintDept').textContent=t.hdrDept;
-  $('pdf2PrintTitle').textContent=t.hdrTitle;
-  $('pdf2SecPhotos').textContent=t.pSecPhotos;
-  $('pdf2PhotosHdr').textContent=t.pPhotosHdr;
-  $('pdf2FrontLabel').textContent=t.pFrontLabel;
-  $('pdf2BackLabel').textContent=t.pBackLabel;
-  safeSet('pdf2FrontNoPhoto', t.noPhoto);
-  safeSet('pdf2BackNoPhoto', t.noPhoto);
-  $('pdf2FooterLeft').textContent=t.footerLeft;
-  $('pdf2FooterBadge').textContent=t.confidential;
-  safeSet('pdf1SecPhotosInline', t.pSecPhotos);
-  safeSet('pdf1PhotosHdrInline', t.pSecPhotos);
-  safeSet('pdf1FrontLabelInline', t.pFrontLabel);
-  safeSet('pdf1BackLabelInline', t.pBackLabel);
-
-  updateCharCount();
-  redrawCanvas();
-  setStatus(t.statusReady);
-}
-
-// Department toggle
-$('useCustomDept').addEventListener('click',()=>{
-  $('deptSelectWrap').style.display='none';
-  $('deptCustomWrap').style.display='flex';
-  $('deptSelect').required=false;
-  $('deptCustom').required=true;
-});
-$('useSelectDept').addEventListener('click',()=>{
-  $('deptCustomWrap').style.display='none';
-  $('deptSelectWrap').style.display='flex';
-  $('deptCustom').required=false;
-  $('deptSelect').required=true;
-});
-
-$('subject').addEventListener('change',()=>{
-  $('customSubjectWrap').style.display=$('subject').value==='Other'?'flex':'none';
-  if($('subject').value!=='Other') $('customSubject').value='';
-});
-
-// Translation
-async function translateText(text,tl){
-  const r=await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`);
-  const d=await r.json();
-  return Array.isArray(d&&d[0])?d[0].map(p=>p[0]).join(''):text;
-}
-$('translateStatementBtn').addEventListener('click',async()=>{
-  const t=T[lang];
-  if(!$('statementDetails').value.trim())return;
-  try{
-    const result=await translateText($('statementDetails').value.trim(),$('translateTarget').value);
-    $('translatedStatement').value=result;
-    $('translatedWrap').hidden=false;
-    setDir($('translatedStatement'),result);
-    setStatus(t.statusTranslated);
-  }catch(e){setStatus(t.statusTranslateError,'error');}
-});
-$('clearTranslateBtn').addEventListener('click',()=>{
-  $('translatedStatement').value='';
-  $('translatedWrap').hidden=true;
-  $('translatedReportCard').style.display='none';
-});
-
-// Theme
-$('themeBtn').addEventListener('click',()=>{
-  isDark=!isDark;
-  document.body.classList.toggle('dark',isDark);
-  $('themeBtn').textContent=isDark?T[lang].btnLight:T[lang].btnDark;
-  redrawCanvas();
-});
-$('languageSelect').addEventListener('change',()=>applyLang($('languageSelect').value));
-
-$('statementDetails').addEventListener('input',updateCharCount);
-
-// Signature canvas
-const canvas=$('sigCanvas');
-const ctx=canvas.getContext('2d');
-ctx.lineWidth=2.2;ctx.lineCap='round';ctx.lineJoin='round';
-
-function resizeCanvas(){
-  const w=canvas.parentElement.clientWidth;
-  canvas.width=w;canvas.height=160;
-  redrawCanvas();
-}
-function redrawCanvas(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.strokeStyle=isDark?'#dbe8ff':'#173b6c';
-  ctx.lineWidth=2.2;ctx.lineCap='round';ctx.lineJoin='round';
-  strokes.forEach(s=>{
-    if(!s.length)return;
-    ctx.beginPath();ctx.moveTo(s[0].x,s[0].y);
-    s.forEach(p=>ctx.lineTo(p.x,p.y));ctx.stroke();
-  });
-}
-function coords(e){
-  const r=canvas.getBoundingClientRect();
-  const sx=canvas.width/r.width,sy=canvas.height/r.height;
-  const cx=e.touches?e.touches[0].clientX:e.clientX;
-  const cy=e.touches?e.touches[0].clientY:e.clientY;
-  return{x:(cx-r.left)*sx,y:(cy-r.top)*sy};
-}
-function startDraw(e){e.preventDefault();drawing=true;const p=coords(e);currentStroke=[p];ctx.beginPath();ctx.moveTo(p.x,p.y);}
-function draw(e){if(!drawing)return;e.preventDefault();const p=coords(e);currentStroke.push(p);ctx.lineTo(p.x,p.y);ctx.stroke();ctx.beginPath();ctx.moveTo(p.x,p.y);if(!hasSig&&currentStroke.length>2){hasSig=true;$('sigAt').value=new Date().toLocaleString();$('sigBadge').textContent=T[lang].sigSigned;}}
-function endDraw(){if(!drawing)return;drawing=false;if(currentStroke.length)strokes.push([...currentStroke]);currentStroke=[];if(strokes.length){hasSig=true;$('sigData').value=canvas.toDataURL();$('sigBadge').textContent=T[lang].sigRecorded;}else redrawCanvas();}
-canvas.addEventListener('mousedown',startDraw);
-window.addEventListener('mousemove',draw);
-window.addEventListener('mouseup',endDraw);
-canvas.addEventListener('touchstart',startDraw,{passive:false});
-canvas.addEventListener('touchmove',draw,{passive:false});
-canvas.addEventListener('touchend',endDraw);
-$('clearSig').addEventListener('click',()=>{strokes=[];hasSig=false;$('sigData').value='';$('sigAt').value='';$('sigBadge').textContent=T[lang].sigNotSigned;redrawCanvas();});
-$('undoSig').addEventListener('click',()=>{strokes.pop();if(!strokes.length){hasSig=false;$('sigData').value='';$('sigAt').value='';$('sigBadge').textContent=T[lang].sigNotSigned;}else{$('sigData').value=canvas.toDataURL();$('sigBadge').textContent=T[lang].sigSigned;}redrawCanvas();});
-window.addEventListener('resize',resizeCanvas);
-
-function getDeptLabel(){
-  if($('deptCustomWrap').style.display!=='none')return $('deptCustom').value.trim()||T[lang].notProvided;
-  return $('deptSelect').options[$('deptSelect').selectedIndex]?.text||T[lang].notProvided;
-}
-function getSubjectLabel(){
-  if($('subject').value==='Other')return $('customSubject').value.trim()||T[lang].notProvided;
-  return $('subject').options[$('subject').selectedIndex]?.text||T[lang].notProvided;
-}
-function formatDT(v){return v?v.replace('T',' '):T[lang].notProvided;}
-function pad2(n){return String(n).padStart(2,'0');}
-function genRef(){const n=new Date();return `SEC-${n.getFullYear()}${pad2(n.getMonth()+1)}${pad2(n.getDate())}-${pad2(n.getHours())}${pad2(n.getMinutes())}`;}
-
-
-
-
-function fillPhotoBox(containerId, data, noPhotoText, altText){
-  const el=$(containerId);
-  if(!el) return;
-  if(data){
-    el.innerHTML=`<img src="${data}" alt="${altText}" style="max-width:100%;max-height:200px;object-fit:contain;display:block;">`;
-  }else{
-    el.innerHTML=`<div class="no-photo" style="font-size:10px;color:#94a3b8;text-align:center;padding:20px;">${noPhotoText}</div>`;
-  }
-}
-
-function fillPage1PhotoSection(){
-  const t=T[lang];
-  safeSet('pdf1SecPhotosInline', t.pSecPhotos);
-  safeSet('pdf1PhotosHdrInline', t.pSecPhotos);
-  safeSet('pdf1FrontLabelInline', t.pFrontLabel);
-  safeSet('pdf1BackLabelInline', t.pBackLabel);
-  const frontData=$('frontPhotoData').value;
-  const backData=$('backPhotoData').value;
-
-  fillPhotoBox('pdf1FrontPhotoInline', frontData, t.noPhoto, 'ID Front');
-  fillPhotoBox('pdf1BackPhotoInline', backData, t.noPhoto, 'ID Back');
-}
-
-function shouldPlacePhotosOnPage1(){
-  const detailsLen = ($('statementDetails').value || '').trim().length;
-  const hasTranslated = !!($('translatedStatement').value || '').trim();
-  const translatedLen = ($('translatedStatement').value || '').trim().length;
-  const totalLen = detailsLen + translatedLen;
-  // conservative threshold for keeping photos on page 1
-  return !hasTranslated ? totalLen <= 900 : totalLen <= 650;
-}
-
-function buildReport(){
-  const t=T[lang];
-  const pr=$('printReport');
-  pr.classList.toggle('rtl',lang==='ar');
-  pr.style.direction=(lang==='ar')?'rtl':'ltr';
-
-  const propName=$('propertyName').value||t.notProvided;
-  $('printMeta').textContent=`${propName} — ${formatDT($('statementDateTime').value)}`;
-  
-  $('corpLogoInitials').textContent=lang==='ar'?'أمن':'SEC';
-  $('printStampBadge').textContent=t.confidential;
-
-  $('rProperty').textContent=propName;
-  $('rDate').textContent=formatDT($('statementDateTime').value);
-  $('rSubject').textContent=getSubjectLabel();
-  $('rEmployeeName').textContent=$('employeeName').value||t.notProvided;
-  $('rPhone').textContent=$('phoneNumber').value||t.notProvided;
-  $('rCompanyName').textContent=$('companyName').value||t.notProvided;
-  $('rDepartment').textContent=getDeptLabel();
-  $('rLocation').textContent=$('incidentLocation').value||t.notProvided;
-
-  const details=$('statementDetails').value||t.notProvided;
-  $('rDetails').textContent=details;
-  $('rDetails').style.direction=isArabic(details)?'rtl':'ltr';
-  $('rDetails').style.textAlign=isArabic(details)?'right':'left';
-
-  const translated=$('translatedStatement').value.trim();
-  $('rTranslatedDetails').textContent=translated||t.notProvided;
-  $('rTranslatedDetails').style.direction=isArabic(translated)?'rtl':'ltr';
-  $('rTranslatedDetails').style.textAlign=isArabic(translated)?'right':'left';
-  $('translatedReportCard').style.display=translated?'block':'none';
-
-  $('rSignedBy').textContent=$('sigName').value||t.notProvided;
-  $('rSignedAt').textContent=$('sigAt').value||t.notProvided;
-  $('rAffirmation').textContent=$('affirmation').checked?t.ackYes:t.ackNo;
-  safeSet('rAffirmationText', t.affirmation);
-  $('rAffirmationText').className=lang==='ar'?'aff-ar':(lang==='ur'?'aff-ur':'aff-en');
-  $('signaturePreview').innerHTML=$('sigData').value?`<img src="${$('sigData').value}" style="max-width:100%;max-height:112px;object-fit:contain;" alt="signature">`:'';
-
-  const frontData=$('frontPhotoData').value;
-  const backData=$('backPhotoData').value;
-
-  if(frontData)$('rFrontPhoto').innerHTML=`<img src="${frontData}" style="max-width:100%;max-height:200px;object-fit:contain;display:block;" alt="ID Front">`;
-  else $('rFrontPhoto').innerHTML=`<div class="no-photo" style="font-size:10px;color:#94a3b8;text-align:center;padding:20px;">${t.noPhoto}</div>`;
-  if(backData)$('rBackPhoto').innerHTML=`<img src="${backData}" style="max-width:100%;max-height:200px;object-fit:contain;display:block;" alt="ID Back">`;
-  else $('rBackPhoto').innerHTML=`<div class="no-photo" style="font-size:10px;color:#94a3b8;text-align:center;padding:20px;">${t.noPhoto}</div>`;
-
-  if(lang==='ar'){
-    pr.querySelectorAll('.report-table th,.report-table td').forEach(el=>{el.style.textAlign='right';el.style.direction='rtl';});
-    pr.querySelectorAll('.report-section-title').forEach(el=>{el.style.borderLeft='none';el.style.borderRight='3px solid #0b57d0';el.style.paddingLeft='0';el.style.paddingRight='8px';});
-    pr.querySelectorAll('.photo-panel:first-child').forEach(el=>{el.style.borderRight='none';el.style.borderLeft='1px solid #dde6f0';});
-  } else {
-    pr.querySelectorAll('.report-table th,.report-table td').forEach(el=>{el.style.textAlign='left';el.style.direction='ltr';});
-    pr.querySelectorAll('.report-section-title').forEach(el=>{el.style.borderRight='none';el.style.borderLeft='3px solid #0b57d0';el.style.paddingRight='0';el.style.paddingLeft='8px';});
-    pr.querySelectorAll('.photo-panel:first-child').forEach(el=>{el.style.borderLeft='none';el.style.borderRight='1px solid #dde6f0';});
-  }
-}
-
-function applyDirToText(el,val){
-  if(!el)return;
-  const rtl=isArabic(val);
-  el.style.direction=rtl?'rtl':'ltr';
-  el.style.textAlign=rtl?'right':'left';
-}
-
-function setPageHeader(prefix,t,propName){
-  $(prefix+'PrintDept').textContent=t.hdrDept;
-  $(prefix+'PrintTitle').textContent=t.hdrTitle;
-  $(prefix+'PrintMeta').textContent=`${propName} — ${formatDT($('statementDateTime').value)}`;
-  
-  $(prefix+'CorpLogoInitials').textContent=lang==='ar'?'أمن':'SEC';
-  $(prefix+'PrintStampBadge').textContent=t.confidential;
-  $(prefix+'FooterLeft').textContent=t.footerLeft;
-  $(prefix+'FooterBadge').textContent=t.confidential;
-}
-
-function buildPdfPage1(){
-  const t=T[lang];
-  const propName=$('propertyName').value||t.notProvided;
-  const page=$('pdfPage1Template');
-  page.classList.toggle('rtl',lang==='ar');
-
-  setPageHeader('pdf1',t,propName);
-
-  $('pdf1SecInfo').textContent=t.pSecInfo;
-  $('pdf1CardInfoHdr').textContent=t.pCardInfo;
-  $('pdf1CardPersonHdr').textContent=t.pCardPerson;
-  $('pdf1ThProperty').textContent=t.pThProperty;
-  $('pdf1ThDate').textContent=t.pThDate;
-  $('pdf1ThSubject').textContent=t.pThSubject;
-  $('pdf1ThName').textContent=t.pThName;
-  $('pdf1ThPhone').textContent=t.pThPhone;
-  $('pdf1ThCompany').textContent=t.pThCompany;
-  $('pdf1ThDept').textContent=t.pThDept;
-  $('pdf1ThLocation').textContent=t.pThLocation;
-  $('pdf1SecNarr').textContent=t.pSecNarr;
-  $('pdf1NarrHdr').textContent=t.pNarrHdr;
-  $('pdf1TranslatedHdr').textContent=t.pTranslatedHdr;
-  $('pdf1SecSig').textContent=t.pSecSig;
-  $('pdf1SigHdr').textContent=t.pSigHdr;
-  $('pdf1SigLabel').textContent=t.pSigLabel;
-  $('pdf1SignedByLabel').textContent=t.pSignedByLabel;
-  $('pdf1SignedAtLabel').textContent=t.pSignedAtLabel;
-
-  $('pdf1Property').textContent=propName;
-  $('pdf1Date').textContent=formatDT($('statementDateTime').value);
-  $('pdf1Subject').textContent=getSubjectLabel();
-  $('pdf1EmployeeName').textContent=$('employeeName').value||t.notProvided;
-  $('pdf1Phone').textContent=$('phoneNumber').value||t.notProvided;
-  $('pdf1CompanyName').textContent=$('companyName').value||t.notProvided;
-  $('pdf1Department').textContent=getDeptLabel();
-  $('pdf1Location').textContent=$('incidentLocation').value||t.notProvided;
-
-  const details=$('statementDetails').value||t.notProvided;
-  $('pdf1Details').textContent=details;
-  applyDirToText($('pdf1Details'), details);
-
-  const translated=$('translatedStatement').value.trim();
-  $('pdf1TranslatedDetails').textContent=translated||t.notProvided;
-  applyDirToText($('pdf1TranslatedDetails'), translated);
-  $('pdf1TranslatedReportCard').style.display=translated?'block':'none';
-
-  $('pdf1SignedBy').textContent=$('sigName').value||t.notProvided;
-  $('pdf1SignedAt').textContent=$('sigAt').value||t.notProvided;
-  $('pdf1Affirmation').textContent=$('affirmation').checked?t.ackYes:t.ackNo;
-  safeSet('pdf1AffirmationText', t.affirmation);
-  $('pdf1AffirmationText').className=lang==='ar'?'aff-ar':(lang==='ur'?'aff-ur':'aff-en');
-  $('pdf1SignaturePreview').innerHTML=$('sigData').value?`<img src="${$('sigData').value}" style="max-width:100%;max-height:112px;object-fit:contain;" alt="signature">`:'';
-  const usePage1Photos = shouldPlacePhotosOnPage1();
-  const wrap = $('pdf1PhotosWrap');
-  if(wrap) wrap.style.display = usePage1Photos ? 'block' : 'none';
-  if(usePage1Photos) fillPage1PhotoSection();
-}
-
-function buildPdfPage2(){
-  const t=T[lang];
-  const propName=$('propertyName').value||t.notProvided;
-  const page=$('pdfPage2Template');
-  if(!page) return;
-  page.classList.toggle('rtl',lang==='ar');
-
-  setPageHeader('pdf2',t,propName);
-
-  $('pdf2SecPhotos').textContent=t.pSecPhotos;
-  $('pdf2PhotosHdr').textContent=t.pSecPhotos;
-  $('pdf2FrontLabel').textContent=t.pFrontLabel;
-  $('pdf2BackLabel').textContent=t.pBackLabel;
-  safeSet('pdf2FrontNoPhoto', t.noPhoto);
-  safeSet('pdf2BackNoPhoto', t.noPhoto);
-
-  const frontData=$('frontPhotoData').value;
-  const backData=$('backPhotoData').value;
-
-  $('pdf2FrontPhoto').innerHTML = frontData
-    ? `<img src="${frontData}" alt="ID Front">`
-    : `<div class="no-photo" style="font-size:10px;color:#94a3b8;text-align:center;padding:20px;">${t.noPhoto}</div>`;
-
-  $('pdf2BackPhoto').innerHTML = backData
-    ? `<img src="${backData}" alt="ID Back">`
-    : `<div class="no-photo" style="font-size:10px;color:#94a3b8;text-align:center;padding:20px;">${t.noPhoto}</div>`;
-}
-
-async function renderElementToPdfPage(pdf, element, addNewPage){
-  const renderArea=$('pdfPageRenderArea');
-  renderArea.innerHTML='';
-  renderArea.appendChild(element.cloneNode(true));
-  await new Promise(r=>setTimeout(r,120));
-  const canvas=await html2canvas(renderArea.firstElementChild,{
-    scale:5,
-    useCORS:true,
-    backgroundColor:'#ffffff',
-    scrollY:0,
-    scrollX:0,
-    windowWidth:1200,
-    logging:false,
-    imageTimeout:20000
-  });
-  const pageW=pdf.internal.pageSize.getWidth();
-  const pageH=pdf.internal.pageSize.getHeight();
-  const margin=8;
-  const imgW=pageW - margin*2;
-  const imgH=canvas.height * imgW / canvas.width;
-  if(addNewPage) pdf.addPage();
-  const img=canvas.toDataURL('image/png');
-  pdf.addImage(img,'PNG',margin,margin,imgW,Math.min(imgH, pageH - margin*2),undefined,'SLOW');
-  renderArea.innerHTML='';
-}
-
-function showProgress(){
-$('progressOverlay').classList.add('show');}
-function hideProgress(){$('progressOverlay').classList.remove('show');}
-function updateProgress(pct){$('progressFill').style.width=`${pct}%`;}
-function makeName(){
-  const dt=($('statementDateTime').value||new Date().toISOString()).slice(0,16).replace('T','_').replace(/:/g,'-');
-  const name=($('employeeName').value||'Person').trim().replace(/[\\/:*?"<>|]+/g,'').replace(/\s+/g,'_')||'Person';
-  return `${dt}_${name}.pdf`;
-}
-
-
-
-$('printBtn').addEventListener('click',async()=>{
-  try{
-    const t=T[lang];
-    if(!$('affirmation').checked){setStatus(t.statusNeedAck,'error');alert(t.statusNeedAck);return;}
-    if(!$('sigData').value&&!strokes.length){setStatus(t.statusNeedSig,'error');alert(t.statusNeedSig);return;}
-    if(!$('frontPhotoData').value){setStatus(t.statusNeedFrontPhoto,'error');alert(t.statusNeedFrontPhoto);return;}
-
-    const reqs=$('sf').querySelectorAll('[required]');
-    for(const r of reqs){
-      if(r.offsetParent!==null&&!String(r.value||'').trim()&&r.type!=='checkbox'){
-        setStatus(t.statusNeedFields,'error');
-        alert(t.statusNeedFields);
-        r.focus();
-        return;
-      }
+function infoSection(pdf,y,title,rows,subTitle){
+ const x=12,W=186,headerH=9,rowH=14,labelW=27,valueW=66;
+ const totalH=headerH+(rows.length*rowH);
+ y=ensurePage(pdf,y,totalH+4,subTitle);
+ // One rounded outer section. Gold is restricted to the navy header only.
+ pdf.setDrawColor(201,214,226);pdf.setFillColor(255,255,255);
+ pdf.roundedRect(x,y,W,totalH,3,3,'FD');
+ // Header fill, clipped visually by a same-size rounded overlay.
+ pdf.setFillColor(21,58,96);pdf.roundedRect(x,y,W,headerH,3,3,'F');
+ pdf.rect(x,y+4.5,W,4.5,'F');
+ pdf.setFillColor(199,164,74);pdf.rect(x,y,2.2,headerH,'F');
+ pdf.setTextColor(255,255,255);pdf.setFont('helvetica','bold');pdf.setFontSize(9);
+ pdf.text(title.toUpperCase(),x+5,y+6);
+ let ry=y+headerH;
+ const xs=[x,x+labelW,x+labelW+valueW,x+labelW+valueW+labelW];
+ const ws=[labelW,valueW,labelW,valueW];
+ for(let r=0;r<rows.length;r++){
+  const full=[rows[r][0]??'',rows[r][1]??'',rows[r][2]??'',rows[r][3]??''];
+  for(let i=0;i<4;i++){
+   const isLabel=(i===0||i===2);
+   if(isLabel){pdf.setFillColor(241,245,248);pdf.rect(xs[i],ry,ws[i],rowH,'F');}
+   if(i>0){pdf.setDrawColor(207,218,228);pdf.line(xs[i],ry,xs[i],ry+rowH);}
+   if(full[i]){
+    if(isLabel){
+     pdf.setTextColor(49,70,91);pdf.setFont('helvetica','bold');pdf.setFontSize(9.5);
+     const lt=pdf.splitTextToSize(String(full[i]),ws[i]-4);pdf.text(lt.slice(0,2),xs[i]+2,ry+5.1);
+    }else{
+     pdf.setTextColor(30,41,59);pdf.setFont('helvetica','normal');pdf.setFontSize(11);
+     const vt=pdf.splitTextToSize(pdfSafe(full[i]),ws[i]-4);pdf.text(vt.slice(0,2),xs[i]+2,ry+5.4);
     }
-
-    if(!window.html2canvas||!window.jspdf?.jsPDF){
-      alert('PDF library unavailable.');
-      return;
-    }
-
-    buildReport();
-    buildPdfPage1();
-    buildPdfPage2();
-
-    setStatus(t.statusPreparing);
-    showProgress();
-    updateProgress(15);
-
-    const {jsPDF}=window.jspdf;
-    const pdf=new jsPDF('p','mm','a4');
-
-    await renderElementToPdfPage(pdf,$('pdfPage1Template'),false);
-    updateProgress(55);
-
-    if(!shouldPlacePhotosOnPage1() && $('pdfPage2Template')){
-      await renderElementToPdfPage(pdf,$('pdfPage2Template'),true);
-    }
-    updateProgress(95);
-
-    pdf.save(makeName());
-
-    hideProgress();
-    updateProgress(0);
-    setStatus(t.statusPDFOk);
-  }catch(err){
-    console.error(err);
-    hideProgress();
-    updateProgress(0);
-    alert('Generate PDF error: ' + (err && err.message ? err.message : err));
+   }
   }
-});
-
-
-
-$('resetBtn').addEventListener('click',()=>{
-  setTimeout(()=>{
-    $('affirmation').checked=false;
-    $('customSubjectWrap').style.display='none';
-    $('deptCustomWrap').style.display='none';
-    $('deptSelectWrap').style.display='flex';
-    $('deptCustom').required=false;$('deptSelect').required=true;
-    strokes=[];hasSig=false;$('sigData').value='';$('sigAt').value='';
-    $('sigBadge').textContent=T[lang].sigNotSigned;redrawCanvas();
-    $('translatedStatement').value='';$('translatedWrap').hidden=true;
-    $('translatedReportCard').style.display='none';
-    $('frontPhotoPreview').style.display='none';$('frontPhotoPreview').src='';$('frontPhotoData').value='';
-    $('backPhotoPreview').style.display='none';$('backPhotoPreview').src='';$('backPhotoData').value='';
-    $('frontPhotoHint').style.display='';$('backPhotoHint').style.display='';
-    $('backPhotoIcon').style.display='';
-    dtLocked=false;setDateTime();
-    updateCharCount();
-    setStatus(T[lang].statusReset,'muted');
-  },10);
-});
-
-resizeCanvas();
-applyLang('en');
+  if(r<rows.length-1){pdf.setDrawColor(207,218,228);pdf.line(x,ry+rowH,x+W,ry+rowH);}
+  ry+=rowH;
+ }
+ return y+totalH+4;
+}
+function narrativeBlock(pdf,y,text,subTitle){y=sectionTitle(pdf,y,'Statement Details',subTitle);const lines=pdf.splitTextToSize(pdfSafe(text),178);let idx=0;while(idx<lines.length){const avail=Math.max(30,282-y-8),maxLines=Math.floor((avail-10)/6.2);if(maxLines<3){pdf.addPage();y=addPdfHeader(pdf,subTitle);continue}const chunk=lines.slice(idx,idx+maxLines),h=Math.max(26,chunk.length*6.2+11);pdf.setDrawColor(207,218,228);pdf.setFillColor(255,255,255);pdf.roundedRect(12,y,186,h,2.5,2.5,'FD');pdf.setTextColor(30,41,59);pdf.setFont('helvetica','normal');pdf.setFontSize(11);pdf.text(chunk,16,y+7.5,{lineHeightFactor:1.15});y+=h+4;idx+=chunk.length}return y}
+function signatureBlockPdf(pdf,y,name,at,img,subTitle){y=sectionTitle(pdf,y,'Acknowledgment & Signature',subTitle);const ack='I affirm that this statement was made voluntarily, without threat or coercion, and all information provided is truthful and correct to the best of my knowledge.';const ackLines=pdf.splitTextToSize(ack,178);const ackH=ackLines.length*4.2+7;y=ensurePage(pdf,y,ackH+40,subTitle);pdf.setFillColor(240,247,255);pdf.setDrawColor(181,212,244);pdf.roundedRect(12,y,186,ackH,2,2,'FD');pdf.setTextColor(30,41,59);pdf.setFontSize(8.4);pdf.text(ackLines,16,y+5.5);y+=ackH+4;const h=34;pdf.setDrawColor(221,230,240);pdf.rect(12,y,92,h);pdf.rect(104,y,47,h);pdf.rect(151,y,47,h);pdf.setTextColor(100,116,139);pdf.setFont('helvetica','bold');pdf.setFontSize(7.2);pdf.text('SIGNATURE',58,y+5,{align:'center'});pdf.text('SIGNED BY',127.5,y+5,{align:'center'});pdf.text('SIGNED DATE & TIME',174.5,y+5,{align:'center'});if(img){try{pdf.addImage(img,'PNG',18,y+7,80,24,undefined,'FAST')}catch(e){console.warn('signature image',e)}}pdf.setTextColor(30,41,59);pdf.setFont('helvetica','normal');pdf.setFontSize(11);pdf.text(pdf.splitTextToSize(pdfSafe(name),39),127.5,y+18,{align:'center'});pdf.text(pdf.splitTextToSize(pdfSafe(at),39),174.5,y+18,{align:'center'});return y+h+4}
+function addImageContain(pdf,data,x,y,w,h){if(!data)return false;try{const props=pdf.getImageProperties(data),r=Math.min(w/props.width,h/props.height),iw=props.width*r,ih=props.height*r;pdf.addImage(data,'JPEG',x+(w-iw)/2,y+(h-ih)/2,iw,ih,undefined,'MEDIUM');return true}catch(e){console.warn(e);return false}}
+function photosBlockPdf(pdf,y,front,back,subTitle){if(!front&&!back)return y;y=sectionTitle(pdf,y,'ID Document Photos',subTitle);y=ensurePage(pdf,y,66,subTitle);pdf.setDrawColor(221,230,240);pdf.rect(12,y,92,62);pdf.rect(106,y,92,62);pdf.setTextColor(71,85,105);pdf.setFont('helvetica','bold');pdf.setFontSize(7.5);pdf.text('ID FRONT PAGE',58,y+5,{align:'center'});pdf.text('ID BACK PAGE',152,y+5,{align:'center'});if(!addImageContain(pdf,front,16,y+8,84,50)){pdf.setFont('helvetica','normal');pdf.setTextColor(148,163,184);pdf.text('No photo provided',58,y+34,{align:'center'})}if(!addImageContain(pdf,back,110,y+8,84,50)){pdf.setFont('helvetica','normal');pdf.setTextColor(148,163,184);pdf.text('No photo provided',152,y+34,{align:'center'})}return y+66}
+function addFooter(pdf){const n=pdf.getNumberOfPages();for(let i=1;i<=n;i++){pdf.setPage(i);pdf.setDrawColor(226,232,240);pdf.line(12,287,198,287);pdf.setFont('helvetica','normal');pdf.setTextColor(148,163,184);pdf.setFontSize(7);pdf.text('Generated from the digital Investigation Written Statement form.',12,292);pdf.text(`Page ${i} of ${n}`,198,292,{align:'right'})}}
+function buildVectorPdf(){const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'p',unit:'mm',format:'a4',compress:true,putOnlyUsedFonts:true});const isNe=mode==='nonEmployee',subTitle=isNe?'None Team Member':'Team Member';let y=addPdfHeader(pdf,subTitle);if(isNe){y=infoSection(pdf,y,'Person Information',[['Date & Time Written',formatDate($('neDateTime').value),'Person Name',$('neName').value],['Photo ID Number',$('nePhotoId').value,'Phone Number',$('nePhone').value],['Company Name',$('neCompany').value,'Host Department',neDepartment()],['Incident Location',$('neLocation').value,'',''],['Subject',selectedSubject('ne'),'','']],subTitle);y=narrativeBlock(pdf,y,$('neDetails').value,subTitle);y=signatureBlockPdf(pdf,y,$('neSigName').value,$('neSigAt').value,sig.ne.data(),subTitle);y=photosBlockPdf(pdf,y,$('frontData').value,$('backData').value,subTitle)}else{y=infoSection(pdf,y,'Team Member Information',[['Date & Time Written',formatDate($('tmDateTime').value),'Team Member Name',$('tmName').value],['ID Number',$('tmId').value,'Department',tmDepartment()],['Designation',$('tmDesignation').value,'Incident Location',$('tmLocation').value],['Subject',selectedSubject('tm'),'','']],subTitle);y=narrativeBlock(pdf,y,$('tmDetails').value,subTitle);y=signatureBlockPdf(pdf,y,$('tmSigName').value,$('tmSigAt').value,sig.tm.data(),subTitle)}addFooter(pdf);return pdf}
+async function generatePdf(){if(!validate())return;if(!window.jspdf?.jsPDF){alert('PDF library unavailable.');return}const LIMIT=1024*1024;try{$('progressOverlay').classList.add('show');$('progressFill').style.width='25%';setStatus('Preparing crystal-clear PDF...');await new Promise(r=>setTimeout(r,20));$('progressFill').style.width='55%';const pdf=buildVectorPdf();$('progressFill').style.width='85%';const size=pdf.output('arraybuffer').byteLength;if(size>LIMIT)throw new Error('PDF exceeds 1 MB. Please use smaller ID photos and try again.');const name=(mode==='nonEmployee'?$('neName').value:$('tmName').value).trim().replace(/[\\/:*?"<>|]+/g,'').replace(/\s+/g,'_')||'Statement';const prefix=mode==='nonEmployee'?'None_Team_Member':'Team_Member';pdf.save(`${prefix}_Investigation_Written_Statement_${name}.pdf`);$('progressFill').style.width='100%';setStatus(`PDF generated successfully — ${(size/1024).toFixed(0)} KB, vector-quality text.`)}catch(e){console.error(e);setStatus('PDF generation failed.',true);alert('Generate PDF error: '+(e?.message||e))}finally{setTimeout(()=>{$('progressOverlay').classList.remove('show');$('progressFill').style.width='0%'},120)}}
+$('pdfBtn').onclick=generatePdf;
+function resetAll(){if(!confirm('Reset all form data?'))return;$('statementForm').reset();$('neDateTime').value=nowLocal();$('tmDateTime').value=nowLocal();$('neCustomSubject').hidden=true;$('tmCustomSubject').hidden=true;sig.ne.clear();sig.tm.clear();['front','back'].forEach(p=>{$(p+'Data').value='';$(p+'Preview').src='';$(p+'Preview').style.display='none';$(p+'Hint').style.display='';$(p+'Icon').style.display=''});$('neCount').textContent='0 characters';$('tmCount').textContent='0 characters';setStatus('Form reset.')} $('resetBtn').onclick=resetAll;
+setTimeout(()=>{sig.ne.resize();sig.tm.resize()},50);switchMode('teamMember');
 })();
 </script>
-</body>
-</html>
+</body></html>
+
+<style>
+/* v11: rounded information sections; gold accent limited to the section header only */
+.panel{border-radius:18px!important;overflow:hidden!important;}
+.panel-hdr{border-radius:17px 17px 0 0!important;}
+.panel-body{border-left:0!important;border-right:0!important;}
+.panel::before,.panel::after{display:none!important;}
+.panel-hdr::before{display:block!important;}
+@media(max-width:760px){.panel{border-radius:15px!important}.panel-hdr{border-radius:14px 14px 0 0!important}}
+</style>
