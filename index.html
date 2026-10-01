@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Security Investigation Written Statement</title>
 <style>
 :root{--bg:#eaf1f8;--surface:#f7fbff;--card:#fff;--card2:#f2f7fc;--border:rgba(58,90,130,.16);--border2:rgba(44,86,154,.25);--primary:#0b57d0;--primary2:#174ea6;--accent:#0f766e;--red:#dc2626;--text:#10233d;--text2:#425b79;--text3:#6c819c;--shadow:0 18px 45px -24px rgba(16,35,61,.28)}
@@ -318,6 +318,49 @@ textarea{min-height:165px!important;line-height:1.6!important;resize:vertical!im
 .foot-actions{margin-left:auto!important;display:flex!important;justify-content:flex-end!important;align-items:center!important;width:auto!important;}
 #pdfBtn{min-height:54px!important;min-width:190px!important;padding:0 36px!important;border-radius:12px!important;font-size:16px!important;font-weight:900!important;letter-spacing:.01em!important;}
 @media(max-width:760px){.footer{justify-content:center!important}.foot-actions{width:100%!important;margin-left:0!important;justify-content:center!important}#pdfBtn{width:100%!important;min-width:0!important;min-height:52px!important;font-size:15px!important}}
+
+/* ===== v21 phone fit + compact information + custom subject ===== */
+.custom-subject-field[hidden]{display:none!important}
+@media(max-width:760px){
+  html,body{max-width:100%;overflow-x:hidden!important}
+  .info-panel .panel-body{padding:10px 12px!important}
+  .info-panel .executive-grid{gap:8px!important}
+  .info-panel .field{gap:4px!important}
+  .info-panel label{margin:0!important;line-height:1.2!important}
+  .info-panel input,.info-panel select{min-height:38px!important;height:38px!important;padding:6px 10px!important;line-height:1.2!important}
+  .info-panel input[type="datetime-local"]{
+    display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;
+    padding:5px 7px!important;font-size:15px!important;box-sizing:border-box!important;
+  }
+  .info-panel input[type="datetime-local"]::-webkit-date-and-time-value{text-align:left!important;min-width:0!important}
+  .info-panel input[type="datetime-local"]::-webkit-datetime-edit{padding:0!important;min-width:0!important}
+  .info-panel input[type="datetime-local"]::-webkit-calendar-picker-indicator{margin:0!important;padding:2px!important}
+}
+@media(max-width:390px){
+  .info-panel .panel-body{padding:9px 10px!important}
+  .info-panel .executive-grid{gap:7px!important}
+  .info-panel input,.info-panel select{min-height:36px!important;height:36px!important;padding:5px 8px!important}
+  .info-panel input[type="datetime-local"]{font-size:14px!important;padding:4px 6px!important}
+}
+
+
+/* ===== v22 ULTRA CSS IN-FORM MESSAGE SYSTEM ===== */
+.form-message-overlay{position:fixed;inset:0;z-index:12000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(8,24,42,.52);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.form-message-overlay.show{display:flex}
+.form-message-card{width:min(440px,100%);background:#fff;border:1px solid #d8e2eb;border-radius:20px;box-shadow:0 28px 70px rgba(8,31,54,.30);overflow:hidden;animation:formMsgIn .18s ease-out}
+@keyframes formMsgIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+.form-message-top{display:flex;align-items:center;gap:13px;padding:18px 20px 14px;border-bottom:1px solid #e5ebf1;background:linear-gradient(180deg,#fbfdff,#f4f8fb)}
+.form-message-icon{width:42px;height:42px;flex:0 0 42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:900;border:1px solid #d8e2eb;background:#edf4fb;color:#153f68}
+.form-message-card.error .form-message-icon{background:#fff1f1;color:#b83232;border-color:#f1c7c7}
+.form-message-card.success .form-message-icon{background:#edf9f3;color:#28735a;border-color:#c9eadb}
+.form-message-title{font-size:16px;font-weight:800;color:#16314d;line-height:1.2}
+.form-message-body{padding:18px 20px 6px;font-size:14px;font-weight:600;line-height:1.55;color:#425b74;white-space:pre-wrap}
+.form-message-actions{display:flex;justify-content:flex-end;padding:14px 20px 20px}
+.form-message-ok{min-width:112px;height:44px;border:0;border-radius:11px;background:#153f68;color:#fff;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 8px 18px rgba(21,63,104,.20)}
+.form-message-ok:hover{background:#0f3154}
+.form-message-ok:focus-visible{outline:3px solid rgba(21,63,104,.20);outline-offset:2px}
+@media(max-width:520px){.form-message-overlay{padding:12px}.form-message-card{border-radius:16px}.form-message-top{padding:16px}.form-message-body{padding:16px 16px 4px}.form-message-actions{padding:12px 16px 16px}.form-message-ok{width:100%;height:46px}}
+/* ===== END v22 MESSAGE SYSTEM ===== */
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
@@ -352,6 +395,7 @@ textarea{min-height:165px!important;line-height:1.6!important;resize:vertical!im
   <div class="field"><label class="req" for="neDepartment">Host Department</label><input id="neDepartment" data-required="1" autocomplete="off" placeholder="Enter host department"></div>
   <div class="field"><label for="neLocation">Incident Location</label><input id="neLocation" placeholder="e.g., Lobby, Pool area"></div>
   <div class="field full"><label class="req" for="neSubject">Select Subject</label><select id="neSubject" data-required="1"></select></div>
+  <div class="field full custom-subject-field" id="neCustomSubjectWrap" hidden><label class="req" for="neCustomSubject">Other Subject</label><input id="neCustomSubject" autocomplete="off" placeholder="Type subject"></div>
 </div></div></div>
 <div class="panel"><div class="panel-hdr">ID Document Photos</div><div class="panel-body"><table class="form-table"><tbody>
 <tr><th><label for="frontPhotoInput">ID Front Page <span style="font-weight:600;color:var(--text3)">(Optional)</span></label></th><td><div class="photo-upload-box"><input type="file" id="frontPhotoInput" accept="image/*" capture="environment"><span class="photo-icon" id="frontIcon">🪪</span><span class="photo-label-text" id="frontHint">Tap to upload ID front page</span><img id="frontPreview" class="photo-preview" alt="ID Front"></div><input type="hidden" id="frontData"></td></tr>
@@ -380,6 +424,7 @@ textarea{min-height:165px!important;line-height:1.6!important;resize:vertical!im
   <div class="field"><label class="req" for="tmDesignation">Designation</label><input id="tmDesignation" data-required="1"></div>
   <div class="field"><label class="req" for="tmLocation">Incident Location</label><input id="tmLocation" data-required="1"></div>
   <div class="field full"><label class="req" for="tmSubject">Select Subject</label><select id="tmSubject" data-required="1"></select></div>
+  <div class="field full custom-subject-field" id="tmCustomSubjectWrap" hidden><label class="req" for="tmCustomSubject">Other Subject</label><input id="tmCustomSubject" autocomplete="off" placeholder="Type subject"></div>
 </div></div></div>
 <div class="panel"><div class="panel-hdr">Statement Details</div><div class="panel-body"><div class="char-row"><label class="req" for="tmDetails">Statement Details</label><span id="tmCount" style="font-size:.72rem;color:var(--text3)">0 characters</span></div><textarea id="tmDetails" data-required="1" placeholder="Enter the full written statement..."></textarea></div></div>
 <div class="panel evidence-panel"><div class="panel-hdr">Supporting Documents / Evidence Photos (If Any)</div><div class="panel-body"><div class="evidence-grid" data-evidence-prefix="tm">
@@ -396,9 +441,45 @@ textarea{min-height:165px!important;line-height:1.6!important;resize:vertical!im
 </section>
 <div class="footer"><div class="status" id="statusMsg"></div><div class="foot-actions"><button class="btn-gold" type="button" id="pdfBtn">Print PDF</button></div></div>
 </form></div></div></div>
+<div class="form-message-overlay" id="formMessageOverlay" role="dialog" aria-modal="true" aria-labelledby="formMessageTitle" aria-describedby="formMessageBody">
+  <div class="form-message-card error" id="formMessageCard">
+    <div class="form-message-top">
+      <div class="form-message-icon" id="formMessageIcon">!</div>
+      <div class="form-message-title" id="formMessageTitle">Attention</div>
+    </div>
+    <div class="form-message-body" id="formMessageBody"></div>
+    <div class="form-message-actions"><button type="button" class="form-message-ok" id="formMessageOk">OK</button></div>
+  </div>
+</div>
+
 <div class="progress-overlay" id="progressOverlay"><div class="progress-card"><div class="progress-title">Generating PDF report</div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-note">Preparing layout and exporting PDF...</div></div></div>
 <script>
-(()=>{'use strict';const $=id=>document.getElementById(id);let mode='teamMember';
+(()=>{'use strict';const $=id=>document.getElementById(id);
+let _formMessageOnClose=null;
+function showFormMessage(message,title='Attention',type='error',onClose=null){
+  const overlay=$('formMessageOverlay'),card=$('formMessageCard');
+  if(!overlay||!card)return;
+  _formMessageOnClose=typeof onClose==='function'?onClose:null;
+  $('formMessageTitle').textContent=title;
+  $('formMessageBody').textContent=String(message||'');
+  card.classList.remove('error','success','info');
+  card.classList.add(type||'error');
+  $('formMessageIcon').textContent=type==='success'?'✓':type==='info'?'i':'!';
+  overlay.classList.add('show');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>$('formMessageOk')?.focus(),20);
+}
+function closeFormMessage(){
+  const overlay=$('formMessageOverlay');
+  if(!overlay)return;
+  overlay.classList.remove('show');
+  document.body.style.overflow='';
+  const cb=_formMessageOnClose;_formMessageOnClose=null;
+  if(cb)setTimeout(cb,0);
+}
+$('formMessageOk')?.addEventListener('click',closeFormMessage);
+$('formMessageOverlay')?.addEventListener('click',e=>{if(e.target===$('formMessageOverlay'))closeFormMessage()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('formMessageOverlay')?.classList.contains('show'))closeFormMessage()});let mode='teamMember';
 const subjects=['','Theft','Guest Complaint','Employee Misconduct','Lost & Found','Access Violation','Safety Incident','Damage to Property','Policy Violation','Key Lost','Key Damaged','Aggressive Behaviour','Physical Assault','Sexual Harassment','Verbal Harassment','Missing Item','Other'];
 const subjectLabels=['Select Subject','Theft','Guest Complaint','Employee Misconduct','Lost & Found','Access Violation','Safety Incident','Damage to Property','Policy Violation','Key Lost','Key Damaged','Aggressive Behaviour','Physical Assault','Sexual Harassment','Verbal Harassment','Missing Item','Other'];
 function fillSelect(el,labels,values){el.innerHTML=labels.map((v,i)=>`<option value="${values[i]}">${v}</option>`).join('')}
@@ -430,6 +511,7 @@ function restoreDraft(){
  try{
   Object.entries(d.values).forEach(([id,val])=>{const el=$(id);if(!el||el.type==='file')return;if(el.type==='checkbox')el.checked=!!val;else el.value=val??''});
   $('neSigName').value=$('neName').value;$('tmSigName').value=$('tmName').value;
+  syncCustomSubject('ne');syncCustomSubject('tm');
   $('neCount').textContent=$('neDetails').value.length+' characters';$('tmCount').textContent=$('tmDetails').value.length+' characters';
   ['front','back'].forEach(k=>{const data=$(k+'Data').value;if(data){$(k+'Preview').src=data;$(k+'Preview').style.display='block';$(k+'Hint').style.display='none';$(k+'Icon').style.display='none'}else{$(k+'Preview').src='';$(k+'Preview').style.display='none';$(k+'Hint').style.display='';$(k+'Icon').style.display=''}});
   ['ne','tm'].forEach(prefix=>{for(let i=1;i<=4;i++){const data=$(prefix+'EvData'+i)?.value||'';renderEvidenceSlot(prefix,i,data)}});
@@ -442,22 +524,56 @@ function restoreDraft(){
 
 function switchMode(next){mode=next;const ne=next==='nonEmployee';$('nonEmployeeMode').hidden=!ne;$('teamMemberMode').hidden=ne;$('nonEmployeeTab').classList.toggle('active',ne);$('teamMemberTab').classList.toggle('active',!ne);$('nonEmployeeTab').setAttribute('aria-selected',String(ne));$('teamMemberTab').setAttribute('aria-selected',String(!ne));$('headerSub').textContent=ne?'None Team Member':'Team Member';setStatus('Ready');setTimeout(()=>{sig[ne?'ne':'tm'].resize()},0);saveDraft()}
 $('nonEmployeeTab').onclick=()=>switchMode('nonEmployee');$('teamMemberTab').onclick=()=>switchMode('teamMember');
-$('neSubject').onchange=saveDraft;
-$('tmSubject').onchange=saveDraft;
+function syncCustomSubject(prefix){
+ const subject=$(prefix+'Subject'), wrap=$(prefix+'CustomSubjectWrap'), custom=$(prefix+'CustomSubject');
+ const isOther=subject && subject.value==='Other';
+ if(wrap) wrap.hidden=!isOther;
+ if(custom){
+   if(isOther) custom.setAttribute('data-required','1');
+   else custom.removeAttribute('data-required');
+ }
+}
+$('neSubject').addEventListener('change',()=>{syncCustomSubject('ne');saveDraft()});
+$('tmSubject').addEventListener('change',()=>{syncCustomSubject('tm');saveDraft()});
+$('neCustomSubject').addEventListener('input',saveDraft);
+$('tmCustomSubject').addEventListener('input',saveDraft);
 function compressImageFile(file,maxW=850,maxH=850,quality=.58){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onerror=reject;reader.onload=e=>{const img=new Image();img.onerror=reject;img.onload=()=>{let w=img.naturalWidth||img.width,h=img.naturalHeight||img.height;const r=Math.min(1,maxW/w,maxH/h);w=Math.max(1,Math.round(w*r));h=Math.max(1,Math.round(h*r));const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d',{alpha:false});x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(img,0,0,w,h);resolve(c.toDataURL('image/jpeg',quality))};img.src=e.target.result};reader.readAsDataURL(file)})}
-function setupPhoto(inputId,previewId,dataId,hintId,iconId){$(inputId).addEventListener('change',async function(){const f=this.files&&this.files[0];if(!f)return;try{const data=await compressImageFile(f);$(dataId).value=data;$(previewId).src=data;$(previewId).style.display='block';$(hintId).style.display='none';$(iconId).style.display='none';saveDraft()}catch(e){console.error(e);alert('Unable to process this image. Please select another image.') }})}setupPhoto('frontPhotoInput','frontPreview','frontData','frontHint','frontIcon');setupPhoto('backPhotoInput','backPreview','backData','backHint','backIcon');
+function setupPhoto(inputId,previewId,dataId,hintId,iconId){$(inputId).addEventListener('change',async function(){const f=this.files&&this.files[0];if(!f)return;try{const data=await compressImageFile(f);$(dataId).value=data;$(previewId).src=data;$(previewId).style.display='block';$(hintId).style.display='none';$(iconId).style.display='none';saveDraft()}catch(e){console.error(e);showFormMessage('Unable to process this image. Please select another image.','Image Upload Error','error') }})}setupPhoto('frontPhotoInput','frontPreview','frontData','frontHint','frontIcon');setupPhoto('backPhotoInput','backPreview','backData','backHint','backIcon');
 function renderEvidenceSlot(prefix,i,data){const preview=$(prefix+'EvPreview'+i),hint=$(prefix+'EvHint'+i),remove=$(prefix+'EvRemove'+i);if(!preview||!hint||!remove)return;if(data){preview.src=data;preview.style.display='block';hint.style.display='none';remove.hidden=false}else{preview.removeAttribute('src');preview.style.display='none';hint.style.display='flex';remove.hidden=true}}
-function setupEvidencePhoto(prefix,i){const input=$(prefix+'EvInput'+i),dataEl=$(prefix+'EvData'+i),remove=$(prefix+'EvRemove'+i);input.addEventListener('change',async function(){const f=this.files&&this.files[0];if(!f)return;try{const data=await compressImageFile(f,640,640,.48);dataEl.value=data;renderEvidenceSlot(prefix,i,data);saveDraft()}catch(e){console.error(e);alert('Unable to process this evidence photo. Please select another image.')}});remove.addEventListener('click',()=>{input.value='';dataEl.value='';renderEvidenceSlot(prefix,i,'');saveDraft()})}
+function setupEvidencePhoto(prefix,i){const input=$(prefix+'EvInput'+i),dataEl=$(prefix+'EvData'+i),remove=$(prefix+'EvRemove'+i);input.addEventListener('change',async function(){const f=this.files&&this.files[0];if(!f)return;try{const data=await compressImageFile(f,640,640,.48);dataEl.value=data;renderEvidenceSlot(prefix,i,data);saveDraft()}catch(e){console.error(e);showFormMessage('Unable to process this evidence photo. Please select another image.','Evidence Photo Error','error')}});remove.addEventListener('click',()=>{input.value='';dataEl.value='';renderEvidenceSlot(prefix,i,'');saveDraft()})}
 ['ne','tm'].forEach(prefix=>{for(let i=1;i<=4;i++)setupEvidencePhoto(prefix,i)});
 function setupSignature(prefix,canvasId){const canvas=$(canvasId),ctx=canvas.getContext('2d');let strokes=[],drawing=false,current=[];function resize(){const rect=canvas.parentElement.getBoundingClientRect();canvas.width=Math.max(300,Math.floor(rect.width-16));canvas.height=170;draw()}function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.strokeStyle='#0057e7';ctx.lineWidth=2.2;ctx.lineCap='round';ctx.lineJoin='round';for(const s of strokes){if(!s.length)continue;ctx.beginPath();ctx.moveTo(s[0].x,s[0].y);for(const p of s.slice(1))ctx.lineTo(p.x,p.y);ctx.stroke()}if(strokes.length){$(prefix+'SigBadge').textContent='Signed';$(prefix+'SigAt').value=formatDate(new Date().toISOString())}else{$(prefix+'SigBadge').textContent='Not signed';$(prefix+'SigAt').value=''}}function point(e){const r=canvas.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:(t.clientX-r.left)*(canvas.width/r.width),y:(t.clientY-r.top)*(canvas.height/r.height)}}function start(e){e.preventDefault();drawing=true;current=[point(e)];strokes.push(current);draw()}function move(e){if(!drawing)return;e.preventDefault();current.push(point(e));draw()}function end(e){if(!drawing)return;e&&e.preventDefault();drawing=false;draw();saveDraft()}canvas.addEventListener('pointerdown',start);canvas.addEventListener('pointermove',move);window.addEventListener('pointerup',end);return{resize,clear(){strokes=[];draw();saveDraft()},undo(){strokes.pop();draw();saveDraft()},has(){return strokes.length>0},data(){return strokes.length?canvas.toDataURL('image/png'):''},serialize(){return strokes.map(st=>st.map(p=>({x:p.x,y:p.y})))},restore(saved){strokes=Array.isArray(saved)?saved.map(st=>Array.isArray(st)?st.map(p=>({x:Number(p.x)||0,y:Number(p.y)||0})):[]):[];draw()}}}
 const sig={ne:setupSignature('ne','neCanvas'),tm:setupSignature('tm','tmCanvas')};window.addEventListener('resize',()=>{sig.ne.resize();sig.tm.resize()});document.querySelectorAll('[data-sig-clear]').forEach(b=>b.onclick=()=>sig[b.dataset.sigClear].clear());
 function bindName(src,dst){$(src).addEventListener('input',()=>{$(dst).value=$(src).value;saveDraft()})}bindName('neName','neSigName');bindName('tmName','tmSigName');
 $('neDetails').oninput=()=>{$('neCount').textContent=$('neDetails').value.length+' characters';saveDraft()};$('tmDetails').oninput=()=>{$('tmCount').textContent=$('tmDetails').value.length+' characters';saveDraft()};
-function selectedSubject(prefix){return $(prefix+'Subject').value}
+function selectedSubject(prefix){const v=$(prefix+'Subject').value;return v==='Other'?($(prefix+'CustomSubject').value.trim()||'Other'):v}
 function neDepartment(){return $('neDepartment').value.trim()}
 function tmDepartment(){return $('tmDepartment').value.trim()}
-function validate(){const root=mode==='nonEmployee'?$('nonEmployeeMode'):$('teamMemberMode');for(const el of root.querySelectorAll('[data-required="1"]')){if(el.hidden||el.closest('[hidden]'))continue;if(!String(el.value||'').trim()){setStatus('Fill all required fields.',true);alert('Fill all required fields.');el.focus();return false}}const aff=mode==='nonEmployee'?$('neAffirm'):$('tmAffirm');if(!aff.checked){setStatus('Please check the acknowledgment checkbox.',true);alert('Please check the acknowledgment checkbox.');return false}const sg=mode==='nonEmployee'?sig.ne:sig.tm;if(!sg.has()){setStatus('Signature required before printing.',true);alert('Signature required before printing.');return false}return true}
-function esc(v){return String(v??'')}
+function validate(){
+  const root=mode==='nonEmployee'?$('nonEmployeeMode'):$('teamMemberMode');
+  for(const el of root.querySelectorAll('[data-required="1"]')){
+    if(el.hidden||el.closest('[hidden]'))continue;
+    if(!String(el.value||'').trim()){
+      setStatus('',true);
+      showFormMessage('Please complete all required fields before printing the PDF.','Required Information','error',()=>{el.focus();el.scrollIntoView({behavior:'smooth',block:'center'})});
+      return false;
+    }
+  }
+  const aff=mode==='nonEmployee'?$('neAffirm'):$('tmAffirm');
+  if(!aff.checked){
+    setStatus('',true);
+    showFormMessage('Please check the acknowledgment checkbox before printing the PDF.','Acknowledgment Required','error',()=>{aff.focus();aff.scrollIntoView({behavior:'smooth',block:'center'})});
+    return false;
+  }
+  const sg=mode==='nonEmployee'?sig.ne:sig.tm;
+  if(!sg.has()){
+    setStatus('',true);
+    const canvas=mode==='nonEmployee'?$('neCanvas'):$('tmCanvas');
+    showFormMessage('Please add the signature before printing the PDF.','Signature Required','error',()=>canvas?.scrollIntoView({behavior:'smooth',block:'center'}));
+    return false;
+  }
+  return true;
+}
 function pdfSafe(v){return String(v??'').trim()||'Not provided'}
 function addPdfHeader(pdf,subTitle){
  pdf.setTextColor(13,41,71);pdf.setFont('helvetica','bold');pdf.setFontSize(14.5);pdf.text('Security Department',12,15);
@@ -553,7 +669,7 @@ function evidenceBlockPdf(pdf,y,photos,subTitle){
 function photosBlockPdf(pdf,y,front,back,subTitle){if(!front&&!back)return y;y=sectionTitle(pdf,y,'ID Document Photos',subTitle);y=ensurePage(pdf,y,66,subTitle);pdf.setDrawColor(221,230,240);pdf.rect(12,y,92,62);pdf.rect(106,y,92,62);pdf.setTextColor(71,85,105);pdf.setFont('helvetica','bold');pdf.setFontSize(7.5);pdf.text('ID FRONT PAGE',58,y+5,{align:'center'});pdf.text('ID BACK PAGE',152,y+5,{align:'center'});if(!addImageContain(pdf,front,16,y+8,84,50)){pdf.setFont('helvetica','normal');pdf.setTextColor(148,163,184);pdf.text('No photo provided',58,y+34,{align:'center'})}if(!addImageContain(pdf,back,110,y+8,84,50)){pdf.setFont('helvetica','normal');pdf.setTextColor(148,163,184);pdf.text('No photo provided',152,y+34,{align:'center'})}return y+66}
 function addFooter(pdf){const n=pdf.getNumberOfPages();for(let i=1;i<=n;i++){pdf.setPage(i);pdf.setDrawColor(226,232,240);pdf.line(12,287,198,287);pdf.setFont('helvetica','normal');pdf.setTextColor(148,163,184);pdf.setFontSize(7);pdf.text('Generated from the digital Investigation Written Statement form.',12,292);pdf.text(`Page ${i} of ${n}`,198,292,{align:'right'})}}
 function buildVectorPdf(){const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'p',unit:'mm',format:'a4',compress:true,putOnlyUsedFonts:true});const isNe=mode==='nonEmployee',subTitle=isNe?'None Team Member':'Team Member';let y=addPdfHeader(pdf,subTitle);if(isNe){y=infoSection(pdf,y,'Person Information',[['Date & Time Written',formatDate($('neDateTime').value),'Person Name',$('neName').value],['Photo ID Number',$('nePhotoId').value,'Phone Number',$('nePhone').value],['Company Name',$('neCompany').value,'Host Department',neDepartment()],['Incident Location',$('neLocation').value,'',''],['Subject',selectedSubject('ne'),'','']],subTitle);y=narrativeBlock(pdf,y,$('neDetails').value,subTitle);y=evidenceBlockPdf(pdf,y,[1,2,3,4].map(i=>$('neEvData'+i).value),subTitle);y=photosBlockPdf(pdf,y,$('frontData').value,$('backData').value,subTitle);y=signatureBlockPdf(pdf,y,$('neSigName').value,$('neSigAt').value,sig.ne.data(),subTitle)}else{y=infoSection(pdf,y,'Team Member Information',[['Date & Time Written',formatDate($('tmDateTime').value),'Team Member Name',$('tmName').value],['ID Number',$('tmId').value,'Department',tmDepartment()],['Designation',$('tmDesignation').value,'Incident Location',$('tmLocation').value],['Subject',selectedSubject('tm'),'','']],subTitle);y=narrativeBlock(pdf,y,$('tmDetails').value,subTitle);y=evidenceBlockPdf(pdf,y,[1,2,3,4].map(i=>$('tmEvData'+i).value),subTitle);y=signatureBlockPdf(pdf,y,$('tmSigName').value,$('tmSigAt').value,sig.tm.data(),subTitle)}addFooter(pdf);return pdf}
-async function generatePdf(){if(!validate())return;if(!window.jspdf?.jsPDF){alert('PDF library unavailable.');return}const LIMIT=1024*1024;try{$('progressOverlay').classList.add('show');$('progressFill').style.width='25%';setStatus('Preparing crystal-clear PDF...');await new Promise(r=>setTimeout(r,20));$('progressFill').style.width='55%';const pdf=buildVectorPdf();$('progressFill').style.width='85%';const size=pdf.output('arraybuffer').byteLength;if(size>LIMIT)throw new Error('PDF exceeds 1 MB. Please use smaller ID photos and try again.');const name=(mode==='nonEmployee'?$('neName').value:$('tmName').value).trim().replace(/[\\/:*?"<>|]+/g,'').replace(/\s+/g,'_')||'Statement';const prefix=mode==='nonEmployee'?'None_Team_Member':'Team_Member';pdf.save(`${prefix}_Investigation_Written_Statement_${name}.pdf`);$('progressFill').style.width='100%';setStatus('')}catch(e){console.error(e);setStatus('PDF generation failed.',true);alert('Generate PDF error: '+(e?.message||e))}finally{setTimeout(()=>{$('progressOverlay').classList.remove('show');$('progressFill').style.width='0%'},120)}}
+async function generatePdf(){if(!validate())return;if(!window.jspdf?.jsPDF){showFormMessage('The PDF library is unavailable. Please reload the page and try again.','PDF Unavailable','error');return}const LIMIT=1024*1024;try{$('progressOverlay').classList.add('show');$('progressFill').style.width='25%';setStatus('Preparing crystal-clear PDF...');await new Promise(r=>setTimeout(r,20));$('progressFill').style.width='55%';const pdf=buildVectorPdf();$('progressFill').style.width='85%';const size=pdf.output('arraybuffer').byteLength;if(size>LIMIT)throw new Error('PDF exceeds 1 MB. Please use smaller ID photos and try again.');const name=(mode==='nonEmployee'?$('neName').value:$('tmName').value).trim().replace(/[\\/:*?"<>|]+/g,'').replace(/\s+/g,'_')||'Statement';const prefix=mode==='nonEmployee'?'None_Team_Member':'Team_Member';pdf.save(`${prefix}_Investigation_Written_Statement_${name}.pdf`);$('progressFill').style.width='100%';setStatus('')}catch(e){console.error(e);setStatus('PDF generation failed.',true);showFormMessage((e?.message||String(e)),'PDF Generation Error','error')}finally{setTimeout(()=>{$('progressOverlay').classList.remove('show');$('progressFill').style.width='0%'},120)}}
 $('pdfBtn').onclick=generatePdf;
 })();
 </script>
