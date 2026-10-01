@@ -363,6 +363,43 @@ textarea{min-height:165px!important;line-height:1.6!important;resize:vertical!im
 /* ===== END v22 MESSAGE SYSTEM ===== */
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+<style>
+/* ===== v23 information spacing + phone-safe date/time ===== */
+/* Slightly compact information section on all screens, without phone-only compression */
+.info-panel .panel-body{padding:14px 16px!important;}
+.info-panel .executive-grid{gap:11px 14px!important;}
+.info-panel .field{gap:6px!important;min-width:0!important;}
+.info-panel input,.info-panel select{
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  min-height:43px!important;height:43px!important;
+  padding:8px 11px!important;box-sizing:border-box!important;
+  font-size:15px!important;font-weight:400!important;
+}
+/* Date/time is display-only text: no native mobile datetime widget overflow */
+#neDateTime,#tmDateTime{
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;
+  font-variant-numeric:tabular-nums!important;
+}
+@media(max-width:760px){
+  .info-panel .panel-body{padding:13px 12px!important;}
+  .info-panel .executive-grid{grid-template-columns:1fr!important;gap:12px!important;}
+  .info-panel .field{gap:6px!important;}
+  .info-panel label{line-height:1.3!important;margin:0!important;}
+  .info-panel input,.info-panel select{
+    min-height:44px!important;height:44px!important;padding:8px 10px!important;
+    font-size:15px!important;font-weight:400!important;
+  }
+  #neDateTime,#tmDateTime{font-size:15px!important;padding-right:10px!important;}
+}
+@media(max-width:390px){
+  .info-panel .panel-body{padding:12px 10px!important;}
+  .info-panel .executive-grid{gap:11px!important;}
+  .info-panel input,.info-panel select{min-height:43px!important;height:43px!important;}
+  #neDateTime,#tmDateTime{font-size:14px!important;}
+}
+</style>
 </head>
 <body>
 <div class="page">
@@ -387,7 +424,7 @@ textarea{min-height:165px!important;line-height:1.6!important;resize:vertical!im
 <section id="nonEmployeeMode" class="form-mode" hidden>
 <div class="panel info-panel"><div class="panel-hdr">Person Information</div><div class="panel-body">
 <div class="executive-grid">
-  <div class="field"><label class="req" for="neDateTime">Date &amp; Time Written</label><input id="neDateTime" type="datetime-local" readonly data-required="1"></div>
+  <div class="field"><label class="req" for="neDateTime">Date &amp; Time Written</label><input id="neDateTime" type="text" readonly data-required="1" inputmode="none"></div>
   <div class="field"><label class="req" for="neName">Person Name</label><input id="neName" data-required="1"></div>
   <div class="field"><label class="req" for="nePhotoId">Photo ID Number</label><input id="nePhotoId" data-required="1"></div>
   <div class="field"><label class="req" for="nePhone">Phone Number</label><input id="nePhone" type="tel" placeholder="+971 50 000 0000" data-required="1"></div>
@@ -417,7 +454,7 @@ textarea{min-height:165px!important;line-height:1.6!important;resize:vertical!im
 <section id="teamMemberMode" class="form-mode">
 <div class="panel info-panel"><div class="panel-hdr">Team Member Information</div><div class="panel-body">
 <div class="executive-grid">
-  <div class="field"><label class="req" for="tmDateTime">Date &amp; Time Written</label><input id="tmDateTime" type="datetime-local" readonly data-required="1"></div>
+  <div class="field"><label class="req" for="tmDateTime">Date &amp; Time Written</label><input id="tmDateTime" type="text" readonly data-required="1" inputmode="none"></div>
   <div class="field"><label class="req" for="tmName">Team Member Name</label><input id="tmName" data-required="1"></div>
   <div class="field"><label class="req" for="tmId">ID Number</label><input id="tmId" data-required="1"></div>
   <div class="field"><label class="req" for="tmDepartment">Department</label><input id="tmDepartment" data-required="1" autocomplete="off" placeholder="Enter department"></div>
@@ -484,7 +521,7 @@ const subjects=['','Theft','Guest Complaint','Employee Misconduct','Lost & Found
 const subjectLabels=['Select Subject','Theft','Guest Complaint','Employee Misconduct','Lost & Found','Access Violation','Safety Incident','Damage to Property','Policy Violation','Key Lost','Key Damaged','Aggressive Behaviour','Physical Assault','Sexual Harassment','Verbal Harassment','Missing Item','Other'];
 function fillSelect(el,labels,values){el.innerHTML=labels.map((v,i)=>`<option value="${values[i]}">${v}</option>`).join('')}
 fillSelect($('neSubject'),subjectLabels,subjects);fillSelect($('tmSubject'),subjectLabels,subjects);
-const pad=n=>String(n).padStart(2,'0');function nowLocal(){const n=new Date();return `${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}T${pad(n.getHours())}:${pad(n.getMinutes())}`};$('neDateTime').value=nowLocal();$('tmDateTime').value=nowLocal();
+const pad=n=>String(n).padStart(2,'0');function nowLocal(){const n=new Date();return `${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}T${pad(n.getHours())}:${pad(n.getMinutes())}`};function nowDisplay(){return formatDate(nowLocal())};$('neDateTime').value=nowDisplay();$('tmDateTime').value=nowDisplay();
 function formatDate(v){const d=v?new Date(v):new Date();return d.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).replace(',','')+' hrs'}
 function setStatus(s,error=false){$('statusMsg').textContent=s;$('statusMsg').style.color=error?'var(--red)':'var(--accent)'}
 const DRAFT_KEY='investigationWrittenStatementDraft_v14';
@@ -516,7 +553,7 @@ function restoreDraft(){
   ['front','back'].forEach(k=>{const data=$(k+'Data').value;if(data){$(k+'Preview').src=data;$(k+'Preview').style.display='block';$(k+'Hint').style.display='none';$(k+'Icon').style.display='none'}else{$(k+'Preview').src='';$(k+'Preview').style.display='none';$(k+'Hint').style.display='';$(k+'Icon').style.display=''}});
   ['ne','tm'].forEach(prefix=>{for(let i=1;i<=4;i++){const data=$(prefix+'EvData'+i)?.value||'';renderEvidenceSlot(prefix,i,data)}});
   sig.ne.restore(d.signatures?.ne||[]);sig.tm.restore(d.signatures?.tm||[]);
-  const openedAt=nowLocal();$('neDateTime').value=openedAt;$('tmDateTime').value=openedAt;
+  const openedAt=nowDisplay();$('neDateTime').value=openedAt;$('tmDateTime').value=openedAt;
   switchMode(d.mode==='nonEmployee'?'nonEmployee':'teamMember');
   return true;
  }finally{draftRestoreInProgress=false}
@@ -668,7 +705,7 @@ function evidenceBlockPdf(pdf,y,photos,subTitle){
 }
 function photosBlockPdf(pdf,y,front,back,subTitle){if(!front&&!back)return y;y=sectionTitle(pdf,y,'ID Document Photos',subTitle);y=ensurePage(pdf,y,66,subTitle);pdf.setDrawColor(221,230,240);pdf.rect(12,y,92,62);pdf.rect(106,y,92,62);pdf.setTextColor(71,85,105);pdf.setFont('helvetica','bold');pdf.setFontSize(7.5);pdf.text('ID FRONT PAGE',58,y+5,{align:'center'});pdf.text('ID BACK PAGE',152,y+5,{align:'center'});if(!addImageContain(pdf,front,16,y+8,84,50)){pdf.setFont('helvetica','normal');pdf.setTextColor(148,163,184);pdf.text('No photo provided',58,y+34,{align:'center'})}if(!addImageContain(pdf,back,110,y+8,84,50)){pdf.setFont('helvetica','normal');pdf.setTextColor(148,163,184);pdf.text('No photo provided',152,y+34,{align:'center'})}return y+66}
 function addFooter(pdf){const n=pdf.getNumberOfPages();for(let i=1;i<=n;i++){pdf.setPage(i);pdf.setDrawColor(226,232,240);pdf.line(12,287,198,287);pdf.setFont('helvetica','normal');pdf.setTextColor(148,163,184);pdf.setFontSize(7);pdf.text('Generated from the digital Investigation Written Statement form.',12,292);pdf.text(`Page ${i} of ${n}`,198,292,{align:'right'})}}
-function buildVectorPdf(){const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'p',unit:'mm',format:'a4',compress:true,putOnlyUsedFonts:true});const isNe=mode==='nonEmployee',subTitle=isNe?'None Team Member':'Team Member';let y=addPdfHeader(pdf,subTitle);if(isNe){y=infoSection(pdf,y,'Person Information',[['Date & Time Written',formatDate($('neDateTime').value),'Person Name',$('neName').value],['Photo ID Number',$('nePhotoId').value,'Phone Number',$('nePhone').value],['Company Name',$('neCompany').value,'Host Department',neDepartment()],['Incident Location',$('neLocation').value,'',''],['Subject',selectedSubject('ne'),'','']],subTitle);y=narrativeBlock(pdf,y,$('neDetails').value,subTitle);y=evidenceBlockPdf(pdf,y,[1,2,3,4].map(i=>$('neEvData'+i).value),subTitle);y=photosBlockPdf(pdf,y,$('frontData').value,$('backData').value,subTitle);y=signatureBlockPdf(pdf,y,$('neSigName').value,$('neSigAt').value,sig.ne.data(),subTitle)}else{y=infoSection(pdf,y,'Team Member Information',[['Date & Time Written',formatDate($('tmDateTime').value),'Team Member Name',$('tmName').value],['ID Number',$('tmId').value,'Department',tmDepartment()],['Designation',$('tmDesignation').value,'Incident Location',$('tmLocation').value],['Subject',selectedSubject('tm'),'','']],subTitle);y=narrativeBlock(pdf,y,$('tmDetails').value,subTitle);y=evidenceBlockPdf(pdf,y,[1,2,3,4].map(i=>$('tmEvData'+i).value),subTitle);y=signatureBlockPdf(pdf,y,$('tmSigName').value,$('tmSigAt').value,sig.tm.data(),subTitle)}addFooter(pdf);return pdf}
+function buildVectorPdf(){const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'p',unit:'mm',format:'a4',compress:true,putOnlyUsedFonts:true});const isNe=mode==='nonEmployee',subTitle=isNe?'None Team Member':'Team Member';let y=addPdfHeader(pdf,subTitle);if(isNe){y=infoSection(pdf,y,'Person Information',[['Date & Time Written',$('neDateTime').value,'Person Name',$('neName').value],['Photo ID Number',$('nePhotoId').value,'Phone Number',$('nePhone').value],['Company Name',$('neCompany').value,'Host Department',neDepartment()],['Incident Location',$('neLocation').value,'',''],['Subject',selectedSubject('ne'),'','']],subTitle);y=narrativeBlock(pdf,y,$('neDetails').value,subTitle);y=evidenceBlockPdf(pdf,y,[1,2,3,4].map(i=>$('neEvData'+i).value),subTitle);y=photosBlockPdf(pdf,y,$('frontData').value,$('backData').value,subTitle);y=signatureBlockPdf(pdf,y,$('neSigName').value,$('neSigAt').value,sig.ne.data(),subTitle)}else{y=infoSection(pdf,y,'Team Member Information',[['Date & Time Written',$('tmDateTime').value,'Team Member Name',$('tmName').value],['ID Number',$('tmId').value,'Department',tmDepartment()],['Designation',$('tmDesignation').value,'Incident Location',$('tmLocation').value],['Subject',selectedSubject('tm'),'','']],subTitle);y=narrativeBlock(pdf,y,$('tmDetails').value,subTitle);y=evidenceBlockPdf(pdf,y,[1,2,3,4].map(i=>$('tmEvData'+i).value),subTitle);y=signatureBlockPdf(pdf,y,$('tmSigName').value,$('tmSigAt').value,sig.tm.data(),subTitle)}addFooter(pdf);return pdf}
 async function generatePdf(){if(!validate())return;if(!window.jspdf?.jsPDF){showFormMessage('The PDF library is unavailable. Please reload the page and try again.','PDF Unavailable','error');return}const LIMIT=1024*1024;try{$('progressOverlay').classList.add('show');$('progressFill').style.width='25%';setStatus('Preparing crystal-clear PDF...');await new Promise(r=>setTimeout(r,20));$('progressFill').style.width='55%';const pdf=buildVectorPdf();$('progressFill').style.width='85%';const size=pdf.output('arraybuffer').byteLength;if(size>LIMIT)throw new Error('PDF exceeds 1 MB. Please use smaller ID photos and try again.');const name=(mode==='nonEmployee'?$('neName').value:$('tmName').value).trim().replace(/[\\/:*?"<>|]+/g,'').replace(/\s+/g,'_')||'Statement';const prefix=mode==='nonEmployee'?'None_Team_Member':'Team_Member';pdf.save(`${prefix}_Investigation_Written_Statement_${name}.pdf`);$('progressFill').style.width='100%';setStatus('')}catch(e){console.error(e);setStatus('PDF generation failed.',true);showFormMessage((e?.message||String(e)),'PDF Generation Error','error')}finally{setTimeout(()=>{$('progressOverlay').classList.remove('show');$('progressFill').style.width='0%'},120)}}
 $('pdfBtn').onclick=generatePdf;
 })();
