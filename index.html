@@ -703,6 +703,11 @@ function addPdfHeader(pdf,subTitle){
  pdf.setTextColor(13,41,71);pdf.setFont('helvetica','bold');pdf.setFontSize(14.5);pdf.text('Security Department',12,15);
  pdf.setFontSize(17.5);pdf.text('Investigation Written Statement',12,23);
  pdf.setFontSize(10.5);pdf.setFont('helvetica','normal');pdf.text(subTitle,12,29);
+ // Private & Confidential badge - restored at top-right on every PDF page.
+ pdf.setFillColor(254,242,242);pdf.setDrawColor(239,68,68);pdf.setLineWidth(.35);
+ pdf.roundedRect(151,10,47,8.5,2.2,2.2,'FD');
+ pdf.setTextColor(185,28,28);pdf.setFont('helvetica','bold');pdf.setFontSize(8.2);
+ pdf.text('PRIVATE & CONFIDENTIAL',174.5,15.45,{align:'center'});
  pdf.setDrawColor(199,164,74);pdf.setLineWidth(.7);pdf.line(12,33,198,33);
  return 39
 }
