@@ -399,6 +399,16 @@ textarea{min-height:165px!important;line-height:1.6!important;resize:vertical!im
   .info-panel input,.info-panel select{min-height:43px!important;height:43px!important;}
   #neDateTime,#tmDateTime{font-size:14px!important;}
 }
+
+/* v29 — lift Print PDF slightly on PC only */
+@media(min-width:761px){
+  .footer{
+    margin-top:-12px!important;
+    transform:translateY(-4px)!important;
+    padding-bottom:4px!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -438,7 +448,7 @@ textarea{min-height:165px!important;line-height:1.6!important;resize:vertical!im
 <tr><th><label for="frontPhotoInput">ID Front Page <span style="font-weight:600;color:var(--text3)">(Optional)</span></label></th><td><div class="photo-upload-box"><input type="file" id="frontPhotoInput" accept="image/*" capture="environment"><span class="photo-icon" id="frontIcon">🪪</span><span class="photo-label-text" id="frontHint">Tap to upload ID front page</span><img id="frontPreview" class="photo-preview" alt="ID Front"></div><input type="hidden" id="frontData"></td></tr>
 <tr><th><label for="backPhotoInput">ID Back Page <span style="font-weight:600;color:var(--text3)">(Optional)</span></label></th><td><div class="photo-upload-box"><input type="file" id="backPhotoInput" accept="image/*" capture="environment"><span class="photo-icon" id="backIcon">🔄</span><span class="photo-label-text" id="backHint">Tap to upload ID back page</span><img id="backPreview" class="photo-preview" alt="ID Back"></div><input type="hidden" id="backData"></td></tr>
 </tbody></table></div></div>
-<div class="panel"><div class="panel-hdr">Statement Details</div><div class="panel-body"><div class="char-row"><label class="req" for="neDetails">Full Details</label><span id="neCount" style="font-size:.72rem;color:var(--text3)">0 characters</span></div><textarea id="neDetails" data-required="1" placeholder="Describe the incident with full detail, timeline, persons involved, actions taken..."></textarea></div></div>
+<div class="panel"><div class="panel-hdr">Statement Details</div><div class="panel-body"><div class="char-row"><label class="req" for="neDetails">Full Details</label><span id="neCount" style="font-size:.72rem;color:var(--text3)">0 characters</span></div><textarea id="neDetails" class="auto-grow-statement" data-required="1" placeholder="Describe the incident with full detail, timeline, persons involved, actions taken..."></textarea><div class="statement-actions"><button class="btn-sm statement-clear-btn" type="button" data-clear-statement="ne">Clear</button></div></div></div>
 <div class="panel evidence-panel"><div class="panel-hdr">Supporting Documents / Evidence Photos (If Any)</div><div class="panel-body"><div class="evidence-grid" data-evidence-prefix="ne">
 <div class="evidence-tile"><button type="button" class="evidence-remove" id="neEvRemove1" aria-label="Remove evidence photo 1" hidden>&times;</button><input type="file" id="neEvInput1" accept="image/*" capture="environment"><div class="evidence-placeholder" id="neEvHint1"><span class="evidence-upload-icon">⇧</span><strong>Add Evidence Photo</strong><small>Photo 1</small></div><img id="neEvPreview1" class="evidence-preview" alt="Evidence Photo 1"><input type="hidden" id="neEvData1"></div>
 <div class="evidence-tile"><button type="button" class="evidence-remove" id="neEvRemove2" aria-label="Remove evidence photo 2" hidden>&times;</button><input type="file" id="neEvInput2" accept="image/*" capture="environment"><div class="evidence-placeholder" id="neEvHint2"><span class="evidence-upload-icon">⇧</span><strong>Add Evidence Photo</strong><small>Photo 2</small></div><img id="neEvPreview2" class="evidence-preview" alt="Evidence Photo 2"><input type="hidden" id="neEvData2"></div>
@@ -463,7 +473,7 @@ textarea{min-height:165px!important;line-height:1.6!important;resize:vertical!im
   <div class="field full"><label class="req" for="tmSubject">Select Subject</label><select id="tmSubject" data-required="1"></select></div>
   <div class="field full custom-subject-field" id="tmCustomSubjectWrap" hidden><label class="req" for="tmCustomSubject">Other Subject</label><input id="tmCustomSubject" autocomplete="off" placeholder="Type subject"></div>
 </div></div></div>
-<div class="panel"><div class="panel-hdr">Statement Details</div><div class="panel-body"><div class="char-row"><label class="req" for="tmDetails">Statement Details</label><span id="tmCount" style="font-size:.72rem;color:var(--text3)">0 characters</span></div><textarea id="tmDetails" data-required="1" placeholder="Enter the full written statement..."></textarea></div></div>
+<div class="panel"><div class="panel-hdr">Statement Details</div><div class="panel-body"><div class="char-row"><label class="req" for="tmDetails">Statement Details</label><span id="tmCount" style="font-size:.72rem;color:var(--text3)">0 characters</span></div><textarea id="tmDetails" class="auto-grow-statement" data-required="1" placeholder="Enter the full written statement..."></textarea><div class="statement-actions"><button class="btn-sm statement-clear-btn" type="button" data-clear-statement="tm">Clear</button></div></div></div>
 <div class="panel evidence-panel"><div class="panel-hdr">Supporting Documents / Evidence Photos (If Any)</div><div class="panel-body"><div class="evidence-grid" data-evidence-prefix="tm">
 <div class="evidence-tile"><button type="button" class="evidence-remove" id="tmEvRemove1" aria-label="Remove evidence photo 1" hidden>&times;</button><input type="file" id="tmEvInput1" accept="image/*" capture="environment"><div class="evidence-placeholder" id="tmEvHint1"><span class="evidence-upload-icon">⇧</span><strong>Add Evidence Photo</strong><small>Photo 1</small></div><img id="tmEvPreview1" class="evidence-preview" alt="Evidence Photo 1"><input type="hidden" id="tmEvData1"></div>
 <div class="evidence-tile"><button type="button" class="evidence-remove" id="tmEvRemove2" aria-label="Remove evidence photo 2" hidden>&times;</button><input type="file" id="tmEvInput2" accept="image/*" capture="environment"><div class="evidence-placeholder" id="tmEvHint2"><span class="evidence-upload-icon">⇧</span><strong>Add Evidence Photo</strong><small>Photo 2</small></div><img id="tmEvPreview2" class="evidence-preview" alt="Evidence Photo 2"><input type="hidden" id="tmEvData2"></div>
@@ -524,32 +534,55 @@ fillSelect($('neSubject'),subjectLabels,subjects);fillSelect($('tmSubject'),subj
 const pad=n=>String(n).padStart(2,'0');function nowLocal(){const n=new Date();return `${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}T${pad(n.getHours())}:${pad(n.getMinutes())}`};function nowDisplay(){return formatDate(nowLocal())};$('neDateTime').value=nowDisplay();$('tmDateTime').value=nowDisplay();
 function formatDate(v){const d=v?new Date(v):new Date();return d.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).replace(',','')+' hrs'}
 function setStatus(s,error=false){$('statusMsg').textContent=s;$('statusMsg').style.color=error?'var(--red)':'var(--accent)'}
-const DRAFT_KEY='investigationWrittenStatementDraft_v14';
+const DRAFT_KEY='investigationWrittenStatementDraft_v15';
+const LEGACY_DRAFT_KEY='investigationWrittenStatementDraft_v14';
+const DRAFT_MEDIA_KEY='investigationWrittenStatementDraftMedia_v15';
 let draftRestoreInProgress=false;
+const MEDIA_FIELD_IDS=['frontData','backData',...['ne','tm'].flatMap(prefix=>[1,2,3,4].map(i=>prefix+'EvData'+i))];
 function collectDraft(){
  const values={};
  document.querySelectorAll('#statementForm input:not([type=file]),#statementForm select,#statementForm textarea').forEach(el=>{
   if(!el.id)return;
   if(el.id==='neDateTime'||el.id==='tmDateTime')return;
+  if(MEDIA_FIELD_IDS.includes(el.id))return; // media is stored separately so photos can never block text autosave
   values[el.id]=el.type==='checkbox'?el.checked:el.value;
  });
- return {version:14,mode,values,signatures:{ne:sig?.ne?.serialize?.()||[],tm:sig?.tm?.serialize?.()||[]},savedAt:Date.now()};
+ return {version:15,mode,values,signatures:{ne:sig?.ne?.serialize?.()||[],tm:sig?.tm?.serialize?.()||[]},savedAt:Date.now()};
+}
+function collectDraftMedia(){
+ const media={};
+ MEDIA_FIELD_IDS.forEach(id=>{const el=$(id);if(el&&el.value)media[id]=el.value});
+ return media;
 }
 function saveDraft(){
  if(draftRestoreInProgress)return;
+ // Save normal form data first. This remains reliable even if large images exceed browser storage quota.
  try{localStorage.setItem(DRAFT_KEY,JSON.stringify(collectDraft()));}
- catch(e){console.warn('Browser draft could not be saved:',e);}
+ catch(e){console.warn('Browser text draft could not be saved:',e);}
+ try{
+  const media=collectDraftMedia();
+  if(Object.keys(media).length)localStorage.setItem(DRAFT_MEDIA_KEY,JSON.stringify(media));
+  else localStorage.removeItem(DRAFT_MEDIA_KEY);
+ }catch(e){console.warn('Browser photo draft could not be saved; text draft is still preserved:',e);}
 }
-function clearDraft(){try{localStorage.removeItem(DRAFT_KEY)}catch(e){console.warn(e)}}
+function clearDraft(){try{localStorage.removeItem(DRAFT_KEY);localStorage.removeItem(DRAFT_MEDIA_KEY);localStorage.removeItem(LEGACY_DRAFT_KEY)}catch(e){console.warn(e)}}
 function restoreDraft(){
- let d=null;try{const raw=localStorage.getItem(DRAFT_KEY);if(raw)d=JSON.parse(raw)}catch(e){console.warn('Browser draft could not be restored:',e)}
+ let d=null;
+ try{
+  const raw=localStorage.getItem(DRAFT_KEY)||localStorage.getItem(LEGACY_DRAFT_KEY);
+  if(raw)d=JSON.parse(raw);
+ }catch(e){console.warn('Browser draft could not be restored:',e)}
  if(!d||!d.values)return false;
  draftRestoreInProgress=true;
  try{
   Object.entries(d.values).forEach(([id,val])=>{const el=$(id);if(!el||el.type==='file')return;if(el.type==='checkbox')el.checked=!!val;else el.value=val??''});
+  // Restore separately stored photos/evidence; also migrate photo values from older v14 drafts when present.
+  let media={};
+  try{const rawMedia=localStorage.getItem(DRAFT_MEDIA_KEY);if(rawMedia)media=JSON.parse(rawMedia)||{}}catch(e){console.warn('Browser photo draft could not be restored:',e)}
+  MEDIA_FIELD_IDS.forEach(id=>{const el=$(id);if(!el)return;const value=media[id] ?? d.values?.[id] ?? '';if(value)el.value=value});
   $('neSigName').value=$('neName').value;$('tmSigName').value=$('tmName').value;
   syncCustomSubject('ne');syncCustomSubject('tm');
-  $('neCount').textContent=$('neDetails').value.length+' characters';$('tmCount').textContent=$('tmDetails').value.length+' characters';
+  $('neCount').textContent=$('neDetails').value.length+' characters';$('tmCount').textContent=$('tmDetails').value.length+' characters';setTimeout(()=>{autoGrowStatement($('neDetails'));autoGrowStatement($('tmDetails'))},0);
   ['front','back'].forEach(k=>{const data=$(k+'Data').value;if(data){$(k+'Preview').src=data;$(k+'Preview').style.display='block';$(k+'Hint').style.display='none';$(k+'Icon').style.display='none'}else{$(k+'Preview').src='';$(k+'Preview').style.display='none';$(k+'Hint').style.display='';$(k+'Icon').style.display=''}});
   ['ne','tm'].forEach(prefix=>{for(let i=1;i<=4;i++){const data=$(prefix+'EvData'+i)?.value||'';renderEvidenceSlot(prefix,i,data)}});
   sig.ne.restore(d.signatures?.ne||[]);sig.tm.restore(d.signatures?.tm||[]);
@@ -581,8 +614,62 @@ function setupEvidencePhoto(prefix,i){const input=$(prefix+'EvInput'+i),dataEl=$
 ['ne','tm'].forEach(prefix=>{for(let i=1;i<=4;i++)setupEvidencePhoto(prefix,i)});
 function setupSignature(prefix,canvasId){const canvas=$(canvasId),ctx=canvas.getContext('2d');let strokes=[],drawing=false,current=[];function resize(){const rect=canvas.parentElement.getBoundingClientRect();canvas.width=Math.max(300,Math.floor(rect.width-16));canvas.height=170;draw()}function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.strokeStyle='#0057e7';ctx.lineWidth=2.2;ctx.lineCap='round';ctx.lineJoin='round';for(const s of strokes){if(!s.length)continue;ctx.beginPath();ctx.moveTo(s[0].x,s[0].y);for(const p of s.slice(1))ctx.lineTo(p.x,p.y);ctx.stroke()}if(strokes.length){$(prefix+'SigBadge').textContent='Signed';$(prefix+'SigAt').value=formatDate(new Date().toISOString())}else{$(prefix+'SigBadge').textContent='Not signed';$(prefix+'SigAt').value=''}}function point(e){const r=canvas.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:(t.clientX-r.left)*(canvas.width/r.width),y:(t.clientY-r.top)*(canvas.height/r.height)}}function start(e){e.preventDefault();drawing=true;current=[point(e)];strokes.push(current);draw()}function move(e){if(!drawing)return;e.preventDefault();current.push(point(e));draw()}function end(e){if(!drawing)return;e&&e.preventDefault();drawing=false;draw();saveDraft()}canvas.addEventListener('pointerdown',start);canvas.addEventListener('pointermove',move);window.addEventListener('pointerup',end);return{resize,clear(){strokes=[];draw();saveDraft()},undo(){strokes.pop();draw();saveDraft()},has(){return strokes.length>0},data(){return strokes.length?canvas.toDataURL('image/png'):''},serialize(){return strokes.map(st=>st.map(p=>({x:p.x,y:p.y})))},restore(saved){strokes=Array.isArray(saved)?saved.map(st=>Array.isArray(st)?st.map(p=>({x:Number(p.x)||0,y:Number(p.y)||0})):[]):[];draw()}}}
 const sig={ne:setupSignature('ne','neCanvas'),tm:setupSignature('tm','tmCanvas')};window.addEventListener('resize',()=>{sig.ne.resize();sig.tm.resize()});document.querySelectorAll('[data-sig-clear]').forEach(b=>b.onclick=()=>sig[b.dataset.sigClear].clear());
+
+/* v28 — complete browser autosave for every editable form value */
+let draftSaveTimer=null;
+function queueDraftSave(){
+  if(draftRestoreInProgress)return;
+  clearTimeout(draftSaveTimer);
+  draftSaveTimer=setTimeout(saveDraft,120);
+}
+$('statementForm').addEventListener('input',e=>{
+  const el=e.target;
+  if(!el||!el.matches('input:not([type=file]),select,textarea'))return;
+  if(el.id==='neDateTime'||el.id==='tmDateTime'||el.id==='neSigAt'||el.id==='tmSigAt'||el.id==='neSigName'||el.id==='tmSigName')return;
+  queueDraftSave();
+});
+$('statementForm').addEventListener('change',e=>{
+  const el=e.target;
+  if(!el||!el.matches('input:not([type=file]),select,textarea'))return;
+  if(el.id==='neDateTime'||el.id==='tmDateTime'||el.id==='neSigAt'||el.id==='tmSigAt'||el.id==='neSigName'||el.id==='tmSigName')return;
+  saveDraft();
+});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')saveDraft()});
+window.addEventListener('pagehide',saveDraft);
+
 function bindName(src,dst){$(src).addEventListener('input',()=>{$(dst).value=$(src).value;saveDraft()})}bindName('neName','neSigName');bindName('tmName','tmSigName');
-$('neDetails').oninput=()=>{$('neCount').textContent=$('neDetails').value.length+' characters';saveDraft()};$('tmDetails').oninput=()=>{$('tmCount').textContent=$('tmDetails').value.length+' characters';saveDraft()};
+function autoGrowStatement(el){
+  if(!el)return;
+  const baseHeight=44;
+  el.style.height='auto';
+  el.style.height=Math.max(baseHeight,el.scrollHeight)+'px';
+}
+function updateStatement(prefix){
+  const el=$(prefix+'Details');
+  $(prefix+'Count').textContent=el.value.length+' characters';
+  autoGrowStatement(el);
+  saveDraft();
+}
+$('neDetails').oninput=()=>updateStatement('ne');
+$('tmDetails').oninput=()=>updateStatement('tm');
+document.querySelectorAll('[data-clear-statement]').forEach(btn=>btn.addEventListener('click',()=>{
+  const prefix=btn.dataset.clearStatement;
+  const el=$(prefix+'Details');
+  el.value='';
+  updateStatement(prefix);
+  el.focus({preventScroll:true});
+}));
+
+/* v33 — restore the device/browser draft only after every control and signature object is initialized. */
+requestAnimationFrame(()=>{
+  const restored=restoreDraft();
+  if(!restored){
+    switchMode('teamMember');
+    autoGrowStatement($('neDetails'));
+    autoGrowStatement($('tmDetails'));
+  }
+});
+
 function selectedSubject(prefix){const v=$(prefix+'Subject').value;return v==='Other'?($(prefix+'CustomSubject').value.trim()||'Other'):v}
 function neDepartment(){return $('neDepartment').value.trim()}
 function tmDepartment(){return $('tmDepartment').value.trim()}
@@ -629,7 +716,7 @@ function sectionTitle(pdf,y,title,subTitle){
  return y+12
 }
 function infoGrid(pdf,y,rows,subTitle){
- const x=12,W=186,labelW=27,valueW=66,rowH=14;
+ const x=12,W=186,labelW=27,valueW=66,rowH=10.5;
  for(const row of rows){
   y=ensurePage(pdf,y,rowH+1,subTitle);
   const full=[row[0]??'',row[1]??'',row[2]??'',row[3]??''];
@@ -644,11 +731,11 @@ function infoGrid(pdf,y,rows,subTitle){
    if(isLabel){
     pdf.setTextColor(49,70,91);pdf.setFont('helvetica','bold');pdf.setFontSize(9.5);
     const lt=pdf.splitTextToSize(String(full[i]),ws[i]-4);
-    pdf.text(lt.slice(0,2),xs[i]+2,y+5.1);
+    pdf.text(lt.slice(0,2),xs[i]+2,y+3.9);
    }else{
     pdf.setTextColor(30,41,59);pdf.setFont('helvetica','normal');pdf.setFontSize(11);
     const vt=pdf.splitTextToSize(pdfSafe(full[i]),ws[i]-4);
-    pdf.text(vt.slice(0,2),xs[i]+2,y+5.4);
+    pdf.text(vt.slice(0,2),xs[i]+2,y+4.15);
    }
   }
   y+=rowH;
@@ -656,13 +743,11 @@ function infoGrid(pdf,y,rows,subTitle){
  return y+3
 }
 function infoSection(pdf,y,title,rows,subTitle){
- const x=12,W=186,headerH=9,rowH=14,labelW=27,valueW=66;
+ const x=12,W=186,headerH=9,rowH=10.5,labelW=27,valueW=66;
  const totalH=headerH+(rows.length*rowH);
  y=ensurePage(pdf,y,totalH+4,subTitle);
- // One rounded outer section. Gold is restricted to the navy header only.
- pdf.setDrawColor(201,214,226);pdf.setFillColor(255,255,255);
- pdf.roundedRect(x,y,W,totalH,3,3,'FD');
- // Header fill, clipped visually by a same-size rounded overlay.
+ pdf.setFillColor(255,255,255);
+ pdf.roundedRect(x,y,W,totalH,3,3,'F');
  pdf.setFillColor(21,58,96);pdf.roundedRect(x,y,W,headerH,3,3,'F');
  pdf.rect(x,y+4.5,W,4.5,'F');
  pdf.setFillColor(199,164,74);pdf.rect(x,y+headerH-.8,W,.8,'F');
@@ -673,26 +758,92 @@ function infoSection(pdf,y,title,rows,subTitle){
  const ws=[labelW,valueW,labelW,valueW];
  for(let r=0;r<rows.length;r++){
   const full=[rows[r][0]??'',rows[r][1]??'',rows[r][2]??'',rows[r][3]??''];
-  for(let i=0;i<4;i++){
-   const isLabel=(i===0||i===2);
-   if(isLabel){pdf.setFillColor(241,245,248);pdf.rect(xs[i],ry,ws[i],rowH,'F');}
-   if(i>0){pdf.setDrawColor(207,218,228);pdf.line(xs[i],ry,xs[i],ry+rowH);}
-   if(full[i]){
-    if(isLabel){
-     pdf.setTextColor(49,70,91);pdf.setFont('helvetica','bold');pdf.setFontSize(9.5);
-     const lt=pdf.splitTextToSize(String(full[i]),ws[i]-4);pdf.text(lt.slice(0,2),xs[i]+2,ry+5.1);
-    }else{
-     pdf.setTextColor(30,41,59);pdf.setFont('helvetica','normal');pdf.setFontSize(11);
-     const vt=pdf.splitTextToSize(pdfSafe(full[i]),ws[i]-4);pdf.text(vt.slice(0,2),xs[i]+2,ry+5.4);
-    }
+  const mergedSubject=(String(full[0]).toLowerCase()==='subject' && !full[2] && !full[3]);
+  // Label cell backgrounds.
+  pdf.setFillColor(241,245,248);
+  if(r===rows.length-1){
+   pdf.roundedRect(xs[0],ry,ws[0],rowH,3,3,'F');
+   pdf.rect(xs[0],ry,ws[0],3,'F');
+   pdf.rect(xs[0]+3,ry,ws[0]-3,rowH,'F');
+  }else{
+   pdf.rect(xs[0],ry,ws[0],rowH,'F');
+  }
+  if(!mergedSubject){
+   pdf.rect(xs[2],ry,ws[2],rowH,'F');
+  }
+
+  // Text: first label/value pair.
+  if(full[0]){
+   pdf.setTextColor(49,70,91);pdf.setFont('helvetica','bold');pdf.setFontSize(9.5);
+   const lt=pdf.splitTextToSize(String(full[0]),ws[0]-4);pdf.text(lt.slice(0,2),xs[0]+2,ry+3.9);
+  }
+  if(full[1]){
+   pdf.setTextColor(30,41,59);pdf.setFont('helvetica','normal');pdf.setFontSize(11);
+   const valueWidth=mergedSubject ? (W-labelW)-4 : ws[1]-4;
+   const vt=pdf.splitTextToSize(pdfSafe(full[1]),valueWidth);pdf.text(vt.slice(0,2),xs[1]+2,ry+4.15);
+  }
+
+  // Text: second label/value pair when the row is not merged.
+  if(!mergedSubject){
+   if(full[2]){
+    pdf.setTextColor(49,70,91);pdf.setFont('helvetica','bold');pdf.setFontSize(9.5);
+    const lt2=pdf.splitTextToSize(String(full[2]),ws[2]-4);pdf.text(lt2.slice(0,2),xs[2]+2,ry+3.9);
+   }
+   if(full[3]){
+    pdf.setTextColor(30,41,59);pdf.setFont('helvetica','normal');pdf.setFontSize(11);
+    const vt2=pdf.splitTextToSize(pdfSafe(full[3]),ws[3]-4);pdf.text(vt2.slice(0,2),xs[3]+2,ry+4.15);
    }
   }
-  if(r<rows.length-1){pdf.setDrawColor(207,218,228);pdf.line(x,ry+rowH,x+W,ry+rowH);}
   ry+=rowH;
  }
+
+ // Standard horizontal row separators across the full width.
+ pdf.setDrawColor(190,205,219);pdf.setLineWidth(.25);
+ for(let r=1;r<rows.length;r++){
+  const sepY=y+headerH+(r*rowH);
+  pdf.line(x,sepY,x+W,sepY);
+ }
+
+ // Row-aware vertical dividers: merged Subject rows only keep the first divider.
+ for(let r=0;r<rows.length;r++){
+  const full=[rows[r][0]??'',rows[r][1]??'',rows[r][2]??'',rows[r][3]??''];
+  const mergedSubject=(String(full[0]).toLowerCase()==='subject' && !full[2] && !full[3]);
+  const top=y+headerH+(r*rowH), bottom=top+rowH;
+  pdf.line(xs[1],top,xs[1],bottom);
+  if(!mergedSubject){
+   pdf.line(xs[2],top,xs[2],bottom);
+   pdf.line(xs[3],top,xs[3],bottom);
+  }
+ }
+
+ pdf.setDrawColor(201,214,226);pdf.setLineWidth(.22);pdf.roundedRect(x,y,W,totalH,3,3,'S');
  return y+totalH+4;
 }
-function narrativeBlock(pdf,y,text,subTitle){y=sectionTitle(pdf,y,'Statement Details',subTitle);const lines=pdf.splitTextToSize(pdfSafe(text),178);let idx=0;while(idx<lines.length){const avail=Math.max(30,282-y-8),maxLines=Math.floor((avail-10)/6.2);if(maxLines<3){pdf.addPage();y=addPdfHeader(pdf,subTitle);continue}const chunk=lines.slice(idx,idx+maxLines),h=Math.max(26,chunk.length*6.2+11);pdf.setDrawColor(207,218,228);pdf.setFillColor(255,255,255);pdf.roundedRect(12,y,186,h,2.5,2.5,'FD');pdf.setTextColor(30,41,59);pdf.setFont('helvetica','normal');pdf.setFontSize(11);pdf.text(chunk,16,y+7.5,{lineHeightFactor:1.15});y+=h+4;idx+=chunk.length}return y}
+function narrativeBlock(pdf,y,text,subTitle){
+ y=sectionTitle(pdf,y,'Statement Details',subTitle);
+ pdf.setFont('helvetica','normal');
+ pdf.setFontSize(11);
+ const lines=pdf.splitTextToSize(pdfSafe(text),178);
+ let idx=0;
+ // PDF-only sizing: the statement frame follows the actual wrapped 11pt text.
+ // No artificial minimum height and no large blank area below short statements.
+ const lineStep=4.07, padTop=4.2, textBody=3.65, padBottom=1.25;
+ while(idx<lines.length){
+  const avail=282-y-8;
+  const maxLines=Math.max(1,Math.floor((avail-padTop-textBody-padBottom)/lineStep)+1);
+  if(avail < padTop+textBody+padBottom){pdf.addPage();y=addPdfHeader(pdf,subTitle);continue}
+  const chunk=lines.slice(idx,idx+maxLines);
+  // Height ends immediately after the LAST rendered line rather than reserving
+  // another complete line step underneath it.
+  const h=padTop+textBody+padBottom+Math.max(0,chunk.length-1)*lineStep;
+  pdf.setDrawColor(207,218,228);pdf.setFillColor(255,255,255);
+  pdf.roundedRect(12,y,186,h,2.5,2.5,'FD');
+  pdf.setTextColor(30,41,59);pdf.setFont('helvetica','normal');pdf.setFontSize(11);
+  pdf.text(chunk,16,y+padTop,{lineHeightFactor:1.05});
+  y+=h+4;idx+=chunk.length;
+ }
+ return y;
+}
 function signatureBlockPdf(pdf,y,name,at,img,subTitle){y=sectionTitle(pdf,y,'Acknowledgment & Signature',subTitle);const ack='I affirm that this statement was made voluntarily, without threat or coercion, and all information provided is truthful and correct to the best of my knowledge.';const ackLines=pdf.splitTextToSize(ack,178);const ackH=ackLines.length*4.2+7;y=ensurePage(pdf,y,ackH+40,subTitle);pdf.setFillColor(240,247,255);pdf.setDrawColor(181,212,244);pdf.roundedRect(12,y,186,ackH,2,2,'FD');pdf.setTextColor(30,41,59);pdf.setFontSize(8.4);pdf.text(ackLines,16,y+5.5);y+=ackH+4;const h=34;pdf.setDrawColor(221,230,240);pdf.rect(12,y,92,h);pdf.rect(104,y,47,h);pdf.rect(151,y,47,h);pdf.setTextColor(100,116,139);pdf.setFont('helvetica','bold');pdf.setFontSize(7.2);pdf.text('SIGNATURE',58,y+5,{align:'center'});pdf.text('SIGNED BY',127.5,y+5,{align:'center'});pdf.text('SIGNED DATE & TIME',174.5,y+5,{align:'center'});if(img){try{pdf.addImage(img,'PNG',18,y+7,80,24,undefined,'FAST')}catch(e){console.warn('signature image',e)}}pdf.setTextColor(30,41,59);pdf.setFont('helvetica','normal');pdf.setFontSize(11);pdf.text(pdf.splitTextToSize(pdfSafe(name),39),127.5,y+18,{align:'center'});pdf.text(pdf.splitTextToSize(pdfSafe(at),39),174.5,y+18,{align:'center'});return y+h+4}
 function addImageContain(pdf,data,x,y,w,h){if(!data)return false;try{const props=pdf.getImageProperties(data),r=Math.min(w/props.width,h/props.height),iw=props.width*r,ih=props.height*r;pdf.addImage(data,'JPEG',x+(w-iw)/2,y+(h-ih)/2,iw,ih,undefined,'MEDIUM');return true}catch(e){console.warn(e);return false}}
 function evidenceBlockPdf(pdf,y,photos,subTitle){
@@ -705,7 +856,7 @@ function evidenceBlockPdf(pdf,y,photos,subTitle){
 }
 function photosBlockPdf(pdf,y,front,back,subTitle){if(!front&&!back)return y;y=sectionTitle(pdf,y,'ID Document Photos',subTitle);y=ensurePage(pdf,y,66,subTitle);pdf.setDrawColor(221,230,240);pdf.rect(12,y,92,62);pdf.rect(106,y,92,62);pdf.setTextColor(71,85,105);pdf.setFont('helvetica','bold');pdf.setFontSize(7.5);pdf.text('ID FRONT PAGE',58,y+5,{align:'center'});pdf.text('ID BACK PAGE',152,y+5,{align:'center'});if(!addImageContain(pdf,front,16,y+8,84,50)){pdf.setFont('helvetica','normal');pdf.setTextColor(148,163,184);pdf.text('No photo provided',58,y+34,{align:'center'})}if(!addImageContain(pdf,back,110,y+8,84,50)){pdf.setFont('helvetica','normal');pdf.setTextColor(148,163,184);pdf.text('No photo provided',152,y+34,{align:'center'})}return y+66}
 function addFooter(pdf){const n=pdf.getNumberOfPages();for(let i=1;i<=n;i++){pdf.setPage(i);pdf.setDrawColor(226,232,240);pdf.line(12,287,198,287);pdf.setFont('helvetica','normal');pdf.setTextColor(148,163,184);pdf.setFontSize(7);pdf.text('Generated from the digital Investigation Written Statement form.',12,292);pdf.text(`Page ${i} of ${n}`,198,292,{align:'right'})}}
-function buildVectorPdf(){const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'p',unit:'mm',format:'a4',compress:true,putOnlyUsedFonts:true});const isNe=mode==='nonEmployee',subTitle=isNe?'None Team Member':'Team Member';let y=addPdfHeader(pdf,subTitle);if(isNe){y=infoSection(pdf,y,'Person Information',[['Date & Time Written',$('neDateTime').value,'Person Name',$('neName').value],['Photo ID Number',$('nePhotoId').value,'Phone Number',$('nePhone').value],['Company Name',$('neCompany').value,'Host Department',neDepartment()],['Incident Location',$('neLocation').value,'',''],['Subject',selectedSubject('ne'),'','']],subTitle);y=narrativeBlock(pdf,y,$('neDetails').value,subTitle);y=evidenceBlockPdf(pdf,y,[1,2,3,4].map(i=>$('neEvData'+i).value),subTitle);y=photosBlockPdf(pdf,y,$('frontData').value,$('backData').value,subTitle);y=signatureBlockPdf(pdf,y,$('neSigName').value,$('neSigAt').value,sig.ne.data(),subTitle)}else{y=infoSection(pdf,y,'Team Member Information',[['Date & Time Written',$('tmDateTime').value,'Team Member Name',$('tmName').value],['ID Number',$('tmId').value,'Department',tmDepartment()],['Designation',$('tmDesignation').value,'Incident Location',$('tmLocation').value],['Subject',selectedSubject('tm'),'','']],subTitle);y=narrativeBlock(pdf,y,$('tmDetails').value,subTitle);y=evidenceBlockPdf(pdf,y,[1,2,3,4].map(i=>$('tmEvData'+i).value),subTitle);y=signatureBlockPdf(pdf,y,$('tmSigName').value,$('tmSigAt').value,sig.tm.data(),subTitle)}addFooter(pdf);return pdf}
+function buildVectorPdf(){const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'p',unit:'mm',format:'a4',compress:true,putOnlyUsedFonts:true});const isNe=mode==='nonEmployee',subTitle=isNe?'None Team Member':'Team Member';let y=addPdfHeader(pdf,subTitle);if(isNe){y=infoSection(pdf,y,'Person Information',[['Date & Time Written',$('neDateTime').value,'Person Name',$('neName').value],['Photo ID Number',$('nePhotoId').value,'Phone Number',$('nePhone').value],['Company Name',$('neCompany').value,'Host Department',neDepartment()],['Incident Location',$('neLocation').value,'Subject',selectedSubject('ne')]],subTitle);y=narrativeBlock(pdf,y,$('neDetails').value,subTitle);y=evidenceBlockPdf(pdf,y,[1,2,3,4].map(i=>$('neEvData'+i).value),subTitle);y=photosBlockPdf(pdf,y,$('frontData').value,$('backData').value,subTitle);y=signatureBlockPdf(pdf,y,$('neSigName').value,$('neSigAt').value,sig.ne.data(),subTitle)}else{y=infoSection(pdf,y,'Team Member Information',[['Date & Time Written',$('tmDateTime').value,'Team Member Name',$('tmName').value],['ID Number',$('tmId').value,'Department',tmDepartment()],['Designation',$('tmDesignation').value,'Incident Location',$('tmLocation').value],['Subject',selectedSubject('tm'),'','']],subTitle);y=narrativeBlock(pdf,y,$('tmDetails').value,subTitle);y=evidenceBlockPdf(pdf,y,[1,2,3,4].map(i=>$('tmEvData'+i).value),subTitle);y=signatureBlockPdf(pdf,y,$('tmSigName').value,$('tmSigAt').value,sig.tm.data(),subTitle)}addFooter(pdf);return pdf}
 async function generatePdf(){if(!validate())return;if(!window.jspdf?.jsPDF){showFormMessage('The PDF library is unavailable. Please reload the page and try again.','PDF Unavailable','error');return}const LIMIT=1024*1024;try{$('progressOverlay').classList.add('show');$('progressFill').style.width='25%';setStatus('Preparing crystal-clear PDF...');await new Promise(r=>setTimeout(r,20));$('progressFill').style.width='55%';const pdf=buildVectorPdf();$('progressFill').style.width='85%';const size=pdf.output('arraybuffer').byteLength;if(size>LIMIT)throw new Error('PDF exceeds 1 MB. Please use smaller ID photos and try again.');const name=(mode==='nonEmployee'?$('neName').value:$('tmName').value).trim().replace(/[\\/:*?"<>|]+/g,'').replace(/\s+/g,'_')||'Statement';const prefix=mode==='nonEmployee'?'None_Team_Member':'Team_Member';pdf.save(`${prefix}_Investigation_Written_Statement_${name}.pdf`);$('progressFill').style.width='100%';setStatus('')}catch(e){console.error(e);setStatus('PDF generation failed.',true);showFormMessage((e?.message||String(e)),'PDF Generation Error','error')}finally{setTimeout(()=>{$('progressOverlay').classList.remove('show');$('progressFill').style.width='0%'},120)}}
 $('pdfBtn').onclick=generatePdf;
 })();
@@ -892,4 +1043,52 @@ textarea{min-height:126px!important;line-height:1.55!important}
 
 /* v20: slightly larger Security Department web header */
 .hdr-kicker{font-size:1.05rem !important;font-weight:800 !important;}
+
+/* v26: comfortable web statement area; PDF sizing is independent and text-tight */
+.auto-grow-statement{
+  min-height:146px!important;
+  height:auto;
+  overflow-y:hidden!important;
+  resize:none!important;
+  line-height:1.55!important;
+  padding:10px 11px!important;
+}
+.statement-actions{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  margin-top:10px;
+}
+.statement-clear-btn{
+  min-width:96px;
+  min-height:38px;
+  padding:0 18px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:800;
+}
+@media(max-width:760px){
+  .auto-grow-statement{min-height:160px!important;width:100%!important;max-width:100%!important;}
+  .statement-actions{margin-top:9px;}
+  .statement-clear-btn{min-width:104px;min-height:40px;}
+}
+
+
+/* v28 — lift phone PDF action inside the page frame */
+@media(max-width:760px){
+  .footer{
+    margin-top:-20px!important;
+    padding:0 8px 8px!important;
+    transform:translateY(-2px)!important;
+  }
+  .foot-actions{
+    width:100%!important;
+    padding:0!important;
+  }
+  #pdfBtn{
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+  }
+}
 </style>
